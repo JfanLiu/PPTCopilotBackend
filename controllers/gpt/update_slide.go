@@ -13,6 +13,7 @@ type UpdateSlideRequest struct {
 	Slide  string `json:"slide"`
 }
 
+// UpdateSlide 修改单个页面
 func (this *Controller) UpdateSlide() {
 	var request UpdateSlideRequest
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)

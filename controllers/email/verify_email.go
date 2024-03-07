@@ -11,6 +11,7 @@ type VerifyEmailRequest struct {
 	Code  string `json:"code"`
 }
 
+// VerifyEmail 验证邮箱与验证码是否匹配
 func (this *Controller) VerifyEmail() {
 	var request VerifyEmailRequest
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
@@ -24,6 +25,7 @@ func (this *Controller) VerifyEmail() {
 		return
 	}
 
+	// TODO: 返回verifycode可能有安全问题
 	if code != verifycode {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "验证码错误", verifycode)
 		this.ServeJSON()

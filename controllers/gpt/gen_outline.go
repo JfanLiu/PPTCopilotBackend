@@ -8,22 +8,27 @@ import (
 	"strings"
 )
 
+// GenOutlineRequest 用于生成大纲的请求结构体
 type GenOutlineRequest struct {
-	Topic   string `json:"topic"`
-	Sponsor string `json:"sponsor"`
+	Topic   string `json:"topic"`   // 主题
+	Sponsor string `json:"sponsor"` // 发起人
 }
 
+// GenOutline 方法用于生成大纲
 func (this *Controller) GenOutline() {
 	var request GenOutlineRequest
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
+	// 获取大纲prompt模板，并根据请求中的主题和发起人信息替换模板中的占位符
 	prompt := conf.GetOutlinePromptTemplate()
 	prompt = strings.ReplaceAll(prompt, "{{topic}}", request.Topic)
 	prompt = strings.ReplaceAll(prompt, "{{sponsor}}", request.Sponsor)
 
 	outline_str := ``
-	debug := 0
+	debug := 0 // 调试模式
 	if debug == 1 {
+		// 如果调试模式开启，则使用固定的大纲字符串
+		// 粥p差不多得了
 		outline_str = `<slides>
 		<section class='cover'>
 		<p>我为什么玩明日方舟</p>
@@ -48,6 +53,7 @@ func (this *Controller) GenOutline() {
 		</section>
 		</slides>`
 	} else {
+		// 如果调试模式未开启，则请求 GPT 模型生成大纲
 		var err error
 		outline_str, err = RequestGpt(prompt, SlidesXML{}) //<slide></slide>
 		if err != nil {
@@ -57,13 +63,17 @@ func (this *Controller) GenOutline() {
 		}
 	}
 
+	// TODO：用缓存会不会更好？
+	// 将生成的大纲字符串保存到数据库中
 	outline, err := models.CreateOutline(outline_str)
 	if err != nil {
+		// 保存大纲到数据库失败，则返回错误响应
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline)
 		this.ServeJSON()
 		return
 	}
 
+	// 返回成功响应
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", outline)
 	this.ServeJSON()
 }

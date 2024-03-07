@@ -10,11 +10,14 @@ import (
 	_ "github.com/go-sql-driver/mysql" // import your used driver
 )
 
+// Outline 大纲结构体
 type Outline struct {
-	Id      int
-	Outline string `orm:"type(text)"`
+	Id      int    // 大纲 id
+	Outline string `orm:"type(text)"` // 大纲内容，类型为 text
 }
 
+// TODO：错误处理可以更优雅
+// GetOutline 从数据库中获取指定 Id 的大纲
 func GetOutline(id int) (Outline, error) {
 	o := orm.NewOrm()
 	outline := Outline{Id: id}
@@ -22,6 +25,7 @@ func GetOutline(id int) (Outline, error) {
 	return outline, err
 }
 
+// CreateOutline 创建一个新的大纲，并将其保存到数据库中
 func CreateOutline(outline_str string) (Outline, error) {
 	o := orm.NewOrm()
 	outline := Outline{Outline: outline_str}
@@ -29,6 +33,7 @@ func CreateOutline(outline_str string) (Outline, error) {
 	return outline, err
 }
 
+// UpdateOutline 函数更新指定 Id 的大纲内容
 func UpdateOutline(id int, outline string) (Outline, error) {
 	o := orm.NewOrm()
 	_outline := Outline{Id: id}
@@ -41,46 +46,54 @@ func UpdateOutline(id int, outline string) (Outline, error) {
 	return _outline, err
 }
 
-// 将outline中的"\n"字符串删去
+// TODO：util提出来/再封装一层
+// RefactOutline 函数用于将outline中的"\n"字符串删去
 func RefactOutline(outline Outline) Outline {
 	outline.Outline = DeleteLineBreak(outline.Outline)
 	return outline
 }
 
+// TODO：合并
+// DeleteLineBreak 函数用于删除字符串中的换行符
 func DeleteLineBreak(outline string) string {
 	outline = strings.ReplaceAll(outline, "\n", "")
 	return outline
 }
 
+// RefactXML 函数用于修改 XML 字符串，删除\n和\t，并返回第一个匹配的 XML 标签
 func RefactXML(xmlStr string) string {
 	xmlStr = strings.ReplaceAll(xmlStr, "\n", "")
 	xmlStr = strings.ReplaceAll(xmlStr, "\t", "")
-	regex := "(<.*>)"
+	regex := "(<.*>)" // 匹配 XML 标签的正则表达式
 	re := regexp.MustCompile(regex)
 	matches := re.FindAllString(xmlStr, -1)
-	return matches[0]
+	return matches[0] // 返回第一个匹配的 XML 标签
 }
 
+// P 结构体表示 XML 中的 <p> 元素
 type P struct {
 	XMLName xml.Name `xml:"p"`
 	Content string   `xml:",innerxml"`
 }
 
+// Slide 结构体表示 XML 中的 <section> 元素
 type Slide struct {
-	XMLName xml.Name `xml:"section"`
-	Class   string   `xml:"class,attr"`
-	P_arr   []P      `xml:"p"`
-	Content string   `xml:",innerxml"`
+	XMLName xml.Name `xml:"section"`    // XML 元素名称为 section
+	Class   string   `xml:"class,attr"` // class 属性
+	P_arr   []P      `xml:"p"`          // 段落数组，对应 <p> 元素
+	Content string   `xml:",innerxml"`  // 内容字段为 XML 元素的内部 XML 字符串
 }
 
+// Slides 结构体表示整个 XML 文档
 type Slides struct {
-	XMLName  xml.Name `xml:"slides"`
-	Sections []Slide  `xml:"section"`
+	XMLName  xml.Name `xml:"slides"`  // XML 元素名称为 slides
+	Sections []Slide  `xml:"section"` // slides数组，对应 <section> 元素
 }
 
+// GetContentSections 函数从 XML 字符串中获取内容部分（即class="content"）
 func GetContentSections(xmlStr string) ([]string, error) {
 	var slides Slides
-	err := xml.Unmarshal([]byte(xmlStr), &slides)
+	err := xml.Unmarshal([]byte(xmlStr), &slides) // 解析 XML 字符串到 Slides 结构体中
 	if err != nil {
 		return []string{}, err
 	}
@@ -95,6 +108,7 @@ func GetContentSections(xmlStr string) ([]string, error) {
 	return contents, nil
 }
 
+// RefactContentSections 函数用于修改幻灯片内容，将其中的内容部分替换为指定的内容
 func RefactContentSections(xmlStr string, guide_slides []string) (string, error) {
 	var slides Slides
 	err := xml.Unmarshal([]byte(xmlStr), &slides)
@@ -103,6 +117,7 @@ func RefactContentSections(xmlStr string, guide_slides []string) (string, error)
 	}
 
 	// 查询<section class='content'>的项
+	// 并将其内容替换为指定的内容
 	var resultxml string
 	//初始化count=0
 	count := 0
@@ -115,10 +130,11 @@ func RefactContentSections(xmlStr string, guide_slides []string) (string, error)
 		}
 	}
 
-	resultxml = "<slides>" + resultxml + "</slides>"
+	resultxml = "<slides>" + resultxml + "</slides>" // 包装成完整的 XML 结构
 	return resultxml, nil
 }
 
+// coverReplace 函数替换cover页中的 title 和 description 信息
 func coverReplace(section Slide, cover string) string {
 	var title = section.P_arr[0].Content
 	var description = section.P_arr[1].Content
@@ -225,6 +241,7 @@ func contentReplace(section Slide, template Template) []string {
 	return retList
 }
 
+// GenPPT 函数用于生成 PPT，根据 XML 中的内容生成对应的幻灯片，并将幻灯片内容替换为模板中的内容
 func GenPPT(xmlStr string, template Template) ([]string, error) {
 	var slides Slides
 	err := xml.Unmarshal([]byte(xmlStr), &slides)
@@ -236,20 +253,20 @@ func GenPPT(xmlStr string, template Template) ([]string, error) {
 
 	for i, section := range slides.Sections {
 		if i == 0 {
-			res = coverReplace(section, template.Cover)
+			res = coverReplace(section, template.Cover) // 封面页替换
 			ppt = append(ppt, res)
 		} else if i == 1 {
-			res = catalogReplace(section, template)
+			res = catalogReplace(section, template) // 目录页替换
 			ppt = append(ppt, res)
 		} else {
-			res_list := contentReplace(section, template)
+			res_list := contentReplace(section, template) // 内容页替换
 			for _, res_item := range res_list {
 				ppt = append(ppt, res_item)
 			}
 		}
 
 	}
-	ppt = append(ppt, template.Thank)
+	ppt = append(ppt, template.Thank) // 添加结尾页
 
 	return ppt, nil
 
