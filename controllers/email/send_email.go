@@ -4,8 +4,9 @@ import (
 	"backend/controllers"
 	"backend/models"
 	"encoding/json"
-
-	"github.com/google/uuid"
+	"fmt"
+	"math/rand"
+	"time"
 )
 
 type SendEmailRequest struct {
@@ -26,7 +27,8 @@ func (this *Controller) SendEmail() {
 	// }
 
 	// 生成验证码
-	verificationCode := uuid.New().String()
+	//verificationCode := uuid.New().String()
+	verificationCode := fmt.Sprintf("%06v", rand.New(rand.NewSource(time.Now().UnixNano())).Int31n(1000000))
 
 	// 将验证码保存到缓存中
 	err := models.SetCodeCache(email, verificationCode)

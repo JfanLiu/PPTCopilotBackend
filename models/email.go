@@ -34,7 +34,7 @@ func SendEmail(email string, verificationCode string) error {
 
 	verifyemail.To = []string{email}
 	verifyemail.From = from
-	verifyemail.Subject = "beego-验证邮件"
+	verifyemail.Subject = "PPTCopilot-验证邮件"
 	verifyemail.Text = "邮件正文"
 	verifyemail.HTML = verificationCode
 	err := verifyemail.Send()
@@ -45,7 +45,7 @@ func SendEmail(email string, verificationCode string) error {
 func SetCodeCache(email string, verifyCode string) error {
 	// 设置验证码缓存
 
-	err := bm.Put(context.TODO(), email, verifyCode, time.Second*300)
+	err := bm.Put(context.TODO(), email, verifyCode, time.Second*300) // 验证码保存300s
 	if err != nil {
 		return err
 	}
