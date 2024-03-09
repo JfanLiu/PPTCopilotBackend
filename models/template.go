@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/beego/beego/v2/client/orm"
+	beego "github.com/beego/beego/v2/server/web"
 )
 
 type Template struct {
@@ -84,10 +85,14 @@ func GetTemplateImageUrl(template_id int) string {
 	image_path := "static/template/" + strconv.Itoa(template_id) + "/cover.png"
 	//查看是否存在该文件
 	_, err := os.Stat(image_path)
+
+	server_ip, _ := beego.AppConfig.String("httpaddr")
+	server_port, _ := beego.AppConfig.String("httpport")
+
 	if err != nil {
-		return "http://{{server_ip}}:8080/_static/project/default.png"
+		return "http://" + server_ip + ":" + server_port + "/_static/project/default.png"
 	}
-	res := "http://{{server_ip}}:8080/_" + image_path
+	res := "http://" + server_ip + ":" + server_port + "/_" + image_path
 
 	return res
 }
