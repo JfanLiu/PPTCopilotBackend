@@ -99,7 +99,7 @@ func (this *Controller) GenPPT() {
 		return
 	}
 
-	// 获取所有的ContentSections
+	// 从大纲中获取所有的ContentSections
 	content_sections, err := models.GetContentSections(outline.Outline)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
@@ -108,6 +108,7 @@ func (this *Controller) GenPPT() {
 	}
 
 	// 所有的ContentSection进行guide_slide
+	// 结果存储在 guide_slides 中
 	guide_slides := make([]string, 0)
 	for _, content_section := range content_sections {
 		guide_slide, err := GuideContentSection(content_section)
@@ -121,6 +122,7 @@ func (this *Controller) GenPPT() {
 	}
 
 	// 将outline.Outline中的所有的ContentSection替换为guide_slide
+	// resultxml 是内容页经过替换的大纲
 	resultxml, err := models.RefactContentSections(outline.Outline, guide_slides)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
@@ -130,6 +132,7 @@ func (this *Controller) GenPPT() {
 
 	// TODO：这个吊名字可以改了
 	// 使用模板生成 PPT，并保存到文件中
+	// res 是最终结果，json格式表示的ppt
 	var res []string
 	res, err = models.GenPPT(resultxml, template)
 	if err != nil {

@@ -92,8 +92,11 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 	})
 	body.Temperature = 0.7
 
+	fmt.Println(body)
+
 	req_url := conf.GetGptApiUrl()
-	req.SetProxyUrl("http://host.docker.internal:7890")
+	//req.SetProxyUrl("http://host.docker.internal:7890")
+	req.SetProxyUrl(conf.GetGptProxy())
 
 	// 最多尝试2次
 	retryCount := 0
@@ -105,10 +108,10 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 			"Content-Type":  "application/json",
 		}))
 		if err != nil {
-			return "", err
+			return "1", err
 		}
 		if resp.Response().StatusCode != 200 {
-			return "", fmt.Errorf("GPT请求失败，状态码为%d", resp.Response().StatusCode)
+			return "2", fmt.Errorf("GPT请求失败，状态码为%d", resp.Response().StatusCode)
 		}
 
 		var res ResponseBody
@@ -126,7 +129,7 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 	}
 
 	// 3次尝试均失败
-	return "", fmt.Errorf("all retries failed")
+	return "3", fmt.Errorf("all retries failed")
 }
 
 func GuideContentSection(outline string) (string, error) {
