@@ -2,6 +2,7 @@ package gpt
 
 import (
 	"backend/conf"
+	"backend/models"
 	"encoding/xml"
 	"fmt"
 	"reflect"
@@ -108,10 +109,10 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 			"Content-Type":  "application/json",
 		}))
 		if err != nil {
-			return "1", err
+			return "", err
 		}
 		if resp.Response().StatusCode != 200 {
-			return "2", fmt.Errorf("GPT请求失败，状态码为%d", resp.Response().StatusCode)
+			return "", fmt.Errorf("GPT请求失败，状态码为%d", resp.Response().StatusCode)
 		}
 
 		var res ResponseBody
@@ -129,18 +130,19 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 	}
 
 	// 3次尝试均失败
-	return "3", fmt.Errorf("all retries failed")
+	return "", fmt.Errorf("all retries failed")
 }
 
+// GuideContentSection 函数丰富每个内容页
 func GuideContentSection(outline string) (string, error) {
-	template := conf.GetGuideSinglePromptTemplate()
-	template = strings.ReplaceAll(template, "{{outline}}", outline)
+	promptTemplate := conf.GetGuideSinglePromptTemplate()
+	prompt := strings.ReplaceAll(promptTemplate, "{{outline}}", outline)
 
-	guide_slide, err := RequestGpt(template, SectionXML{}) // <section></section>
+	guide_slide, err := RequestGpt(prompt, SectionXML{}) // <section></section>
 	if err != nil {
 		return "", err
 	}
 
-	guide_slide = strings.ReplaceAll(guide_slide, "\n", "")
+	models.StrDeleteLineBreak(guide_slide)
 	return guide_slide, nil
 }

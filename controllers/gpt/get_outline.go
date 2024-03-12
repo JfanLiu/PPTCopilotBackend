@@ -24,8 +24,8 @@ func (this *Controller) GetOutline() {
 		return
 	}
 
-	// 调用 models 包中的 RefactOutline 调整大纲格式
-	outline = models.RefactOutline(outline)
+	// 调用 models 包中的 ReformatOutline 调整大纲格式
+	outline = models.ReformatOutline(outline)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", outline)
 	this.ServeJSON()

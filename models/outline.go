@@ -16,7 +16,6 @@ type Outline struct {
 	Outline string `orm:"type(text)"` // 大纲内容，类型为 text
 }
 
-// TODO：错误处理可以更优雅
 // GetOutline 从数据库中获取指定 Id 的大纲
 func GetOutline(id int) (Outline, error) {
 	o := orm.NewOrm()
@@ -47,21 +46,19 @@ func UpdateOutline(id int, outline string) (Outline, error) {
 }
 
 // TODO：util提出来/再封装一层
-// RefactOutline 函数用于将outline中的"\n"字符串删去
-func RefactOutline(outline Outline) Outline {
-	outline.Outline = DeleteLineBreak(outline.Outline)
+// ReformatOutline 函数用于将outline中的"\n"字符串删去
+func ReformatOutline(outline Outline) Outline {
+	outline.Outline = StrDeleteLineBreak(outline.Outline)
 	return outline
 }
 
-// TODO：合并
-// DeleteLineBreak 函数用于删除字符串中的换行符
-func DeleteLineBreak(outline string) string {
-	outline = strings.ReplaceAll(outline, "\n", "")
-	return outline
+// StrDeleteLineBreak 函数用于删除字符串中的换行符
+func StrDeleteLineBreak(str string) string {
+	return strings.ReplaceAll(str, "\n", "")
 }
 
-// RefactXML 函数用于修改 XML 字符串，删除\n和\t，并返回第一个匹配的 XML 标签
-func RefactXML(xmlStr string) string {
+// ReformatXML 函数用于修改 XML 字符串，删除\n和\t，并返回第一个匹配的 XML 标签
+func ReformatXML(xmlStr string) string {
 	xmlStr = strings.ReplaceAll(xmlStr, "\n", "")
 	xmlStr = strings.ReplaceAll(xmlStr, "\t", "")
 	regex := "(<.*>)" // 匹配 XML 标签的正则表达式
@@ -108,6 +105,7 @@ func GetContentSections(xmlStr string) ([]string, error) {
 	return contents, nil
 }
 
+// TODO:全部使用结构体
 // RefactContentSections 函数用于修改幻灯片内容，将其中的内容部分替换为指定的内容
 func RefactContentSections(xmlStr string, guide_slides []string) (string, error) {
 	var slides Slides
@@ -145,6 +143,7 @@ func coverReplace(section Slide, cover string) string {
 	return cover
 }
 
+// catalogReplace 函数替换目录页信息
 func catalogReplace(section Slide, template Template) string {
 	var p_num = len(section.P_arr)
 	var p_list = section.P_arr
@@ -175,6 +174,7 @@ func catalogReplace(section Slide, template Template) string {
 
 }
 
+// contentReplace 函数替换内容页信息
 func contentReplace(section Slide, template Template) []string {
 	var p_num = len(section.P_arr)
 	var p_list = section.P_arr
@@ -241,8 +241,9 @@ func contentReplace(section Slide, template Template) []string {
 	return retList
 }
 
-// GenPPT 函数用于生成 PPT，根据 XML 中的内容生成对应的幻灯片，并将幻灯片内容替换为模板中的内容
-func GenPPT(xmlStr string, template Template) ([]string, error) {
+// GenPPTWithTemplate 函数用于生成 PPT，根据 XML 中的内容和模板生成对应的幻灯片，并将幻灯片内容替换为模板中的内容
+// 返回结果是 string 格式表示的最终ppt
+func GenPPTWithTemplate(xmlStr string, template Template) ([]string, error) {
 	var slides Slides
 	err := xml.Unmarshal([]byte(xmlStr), &slides)
 	if err != nil {

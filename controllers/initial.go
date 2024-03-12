@@ -11,8 +11,9 @@ type InitialController struct {
 	beego.Controller
 }
 
+// Get 初始化数据库
 func (this *InitialController) Get() {
-	// 初始化数据库
+
 	// 删除所有表
 	models.DropAllTables()
 

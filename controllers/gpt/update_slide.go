@@ -28,7 +28,7 @@ func (this *Controller) UpdateSlide() {
 		this.ServeJSON()
 		return
 	}
-	updated_slide = models.RefactXML(updated_slide)
+	updated_slide = models.ReformatXML(updated_slide)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", updated_slide)
 	this.ServeJSON()
