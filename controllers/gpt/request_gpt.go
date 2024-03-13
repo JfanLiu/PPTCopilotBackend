@@ -135,14 +135,22 @@ func RequestGpt(prompt string, genXmlType interface{}) (string, error) {
 
 // GuideContentSection 函数丰富每个内容页
 func GuideContentSection(outline string) (string, error) {
-	promptTemplate := conf.GetGuideSinglePromptTemplate()
-	prompt := strings.ReplaceAll(promptTemplate, "{{outline}}", outline)
 
-	guide_slide, err := RequestGpt(prompt, SectionXML{}) // <section></section>
-	if err != nil {
-		return "", err
+	debug := 1 // 调试模式
+	if debug == 1 {
+		guide_slide := "<section class='content'><p>社交互动</p><p>1. 分享自己在游戏中的心得体会有助于与其他玩家建立更紧密的联系，增强游戏体验。</p><p>2. 参与游戏社区的互动活动，不仅可以赢取奖励，还能结交志同道合的朋友。</p><p>3. 玩家之间的互动是游戏中不可或缺的一部分，可以互相帮助、交流游戏心得、组队挑战副本等。</p><p>4. 玩家之间的互动是游戏中不可或缺的一部分，可以互相帮助、交流游戏心得、组队挑战副本等。</p><p>5. 玩家之间的互动是游戏中不可或缺的一部分，可以互相帮助、交流游戏心得、组队挑战副本等。</p></section>"
+		return guide_slide, nil
+	} else {
+		promptTemplate := conf.GetGuideSinglePromptTemplate()
+		prompt := strings.ReplaceAll(promptTemplate, "{{outline}}", outline)
+
+		guide_slide, err := RequestGpt(prompt, SectionXML{}) // <section></section>
+		if err != nil {
+			return "", err
+		}
+
+		models.StrDeleteLineBreak(guide_slide)
+		return guide_slide, nil
 	}
 
-	models.StrDeleteLineBreak(guide_slide)
-	return guide_slide, nil
 }
