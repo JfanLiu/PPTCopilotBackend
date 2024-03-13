@@ -10,6 +10,7 @@ import (
 type UpdateProjectRequest struct {
 	Name        *string `json:"name"`
 	Description *string `json:"description"`
+	Visible     bool    `json:"visible"`
 }
 
 func (this *Controller) UpdateProject() {
@@ -55,6 +56,15 @@ func (this *Controller) UpdateProject() {
 	}
 	if request.Description != nil {
 		_, err := models.UpdateProjectDescription(id, *request.Description)
+		if err != nil {
+
+			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+			this.ServeJSON()
+			return
+		}
+	}
+	if request.Description != nil {
+		_, err := models.UpdateProjectVisible(id, request.Visible)
 		if err != nil {
 
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)

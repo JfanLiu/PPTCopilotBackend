@@ -101,9 +101,9 @@ func GetTemplateImageUrl(template_id int) string {
 	//查看是否存在该文件
 	_, err := os.Stat(image_path)
 	if err != nil {
-		return "http://{{server_ip}}:8080/_static/project/default.png"
+		return "http://localhost:8080/_static/project/default.png"
 	}
-	res := "http://{{server_ip}}:8080/_" + image_path
+	res := "http://localhost:8080/_" + image_path
 
 	return res
 }

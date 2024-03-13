@@ -43,7 +43,7 @@ func (this *Controller) CloneProject() {
 	}
 
 	// 创建项目
-	project, err := models.CreateProject(clone_project.Name, clone_project.Description, user_id)
+	project, err := models.CreateProject(clone_project.Name, clone_project.Description, user_id, clone_project.Visible)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), 3)
 		this.ServeJSON()

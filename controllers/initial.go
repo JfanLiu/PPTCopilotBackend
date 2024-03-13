@@ -27,7 +27,7 @@ func (this *InitialController) Get() {
 	models.CreateUser("lucy", "123456", "2052150@tongji.edu.cn")
 
 	// 初始化Project
-	models.CreateProject("project1", "admin", 1)
+	models.CreateProject("project1", "admin", 1, true)
 
 	// 初始化File
 	models.CreateFile("cover.png", 1)

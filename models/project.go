@@ -15,30 +15,38 @@ type Project struct {
 	Description string    `orm:"size(100)"`
 	Creator     *User     `orm:"rel(fk)"` // 设置一对多的反向关系
 	Star        int       `orm:"default(0)"`
+	Visible     bool      `orm:"default(true)"`
 	Created     time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
 }
-
 type ProjectResponse struct {
 	Id          int
 	Name        string
 	Description string
 	Creator     *User
 	Star        int
+	Visible     bool
 	Created     string
 	Updated     string
 }
 
+// TODO:优化此函数
+// RefactProjects 函数通过creatorid取creator信息
 func RefactProjects(projects []Project) []Project {
+	// 使用 for 循环遍历项目列表中的每个项目
 	for i, project := range projects {
+		// 获取项目的创建者信息，并创建一个新的 User 结构体
 		creator_temp, _ := GetUser(project.Creator.Id)
 		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
-		// projects[i] = Project{Name: project.Name, Description: project.Description, Creator: &creator}
+
+		// TODO:这里的赋值好像无效
 		projects[i].Name = project.Name
 		projects[i].Description = project.Description
+		projects[i].Visible = project.Visible
 		projects[i].Creator = &creator
 		projects[i].Star = project.Star
 	}
+	// 返回更新后的项目列表
 	return projects
 }
 
@@ -50,7 +58,7 @@ func RefactProject(project Project) Project {
 	return project
 }
 
-func CreateProject(name string, description string, creator_id int) (Project, error) {
+func CreateProject(name string, description string, creator_id int, visible bool) (Project, error) {
 	o := orm.NewOrm()
 	var creator User
 	creator.Id = creator_id
@@ -61,7 +69,7 @@ func CreateProject(name string, description string, creator_id int) (Project, er
 		return Project{}, err
 	}
 
-	project := Project{Name: name, Description: description, Creator: &creator}
+	project := Project{Name: name, Description: description, Creator: &creator, Visible: visible}
 	// 创建项目
 	_, err = o.Insert(&project)
 	return project, err
@@ -85,6 +93,18 @@ func UpdateProjectDescription(id int, description string) (Project, error) {
 	err := o.Read(&project)
 	if err == nil {
 		project.Description = description
+		_, err := o.Update(&project)
+		return project, err
+	}
+	return project, err
+}
+
+func UpdateProjectVisible(id int, visible bool) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Visible = visible
 		_, err := o.Update(&project)
 		return project, err
 	}

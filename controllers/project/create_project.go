@@ -9,6 +9,7 @@ import (
 type CreateProjectRequest struct {
 	Name        *string `json:"name"`
 	Description *string `json:"description"`
+	Visible     bool    `json:"visible"`
 }
 
 func (this *Controller) CreateProject() {
@@ -48,7 +49,7 @@ func (this *Controller) CreateProject() {
 		return
 	}
 
-	project, err := models.CreateProject(*request.Name, *request.Description, id)
+	project, err := models.CreateProject(*request.Name, *request.Description, id, request.Visible)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()

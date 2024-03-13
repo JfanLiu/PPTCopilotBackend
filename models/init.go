@@ -18,10 +18,19 @@ func jsonObject2string(obj JsonObject) string {
 
 // 初始化数据表
 func init() {
-	//// 获取配置文件中的数据库地址
+
+	// ---------------------------------
+	// 			调试请使用以下代码
+	// ---------------------------------
+
+	// 获取配置文件中的数据库地址
 	//mysqlUrls, err := beego.AppConfig.String("mysqlurls")
 	//fmt.Println("MYSQL_Urls: ", mysqlUrls)
 	//orm.RegisterDataBase("default", "mysql", "root:admin@tcp("+mysqlUrls+")/now_db?charset=utf8&loc=Local")
+
+	// ---------------------------------
+	// 		 docker部署请使用以下代码
+	// ---------------------------------
 
 	// 获取环境变量
 	mysqlHost := os.Getenv("MYSQL_HOST")
