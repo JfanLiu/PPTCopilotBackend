@@ -35,7 +35,7 @@ func (this *Controller) CloneProject() {
 	}
 
 	// 获取项目文件
-	clone_files, err := models.GetFiles(clone_id)
+	clone_files, err := models.GetAllFilesOfProj(clone_id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), 2)
 		this.ServeJSON()

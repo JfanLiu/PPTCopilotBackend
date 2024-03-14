@@ -32,6 +32,7 @@ func GetObj(obj string) JsonObject {
 	return ret
 }
 
+// 模板由Template格式改为json格式
 func GetJsonTemplate(template Template) JsonObject {
 	return map[string]interface{}{
 		"id":         template.Id,

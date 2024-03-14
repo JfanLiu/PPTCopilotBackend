@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"time"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -19,9 +20,13 @@ type User struct {
 }
 
 func GetAllUsers() []User {
-	o := orm.NewOrm()
 	var users []User
-	o.QueryTable("user").All(&users)
+
+	_, err := orm.NewOrm().QueryTable("user").All(&users)
+	if err != nil {
+		return nil
+	}
+
 	return users
 }
 
@@ -39,6 +44,7 @@ func UpdateUserUsername(id int, username string) error {
 	}
 	return nil
 }
+
 func UpdateUserPassword(id int, password string) error {
 	o := orm.NewOrm()
 	user := User{Id: id}
@@ -88,16 +94,16 @@ func DeleteUser(id int) error {
 	return err
 }
 
-// 验证用户信息
-func VerifyUser(username_or_email string, password string) (User, error) {
+// VerifyUser 验证用户信息
+func VerifyUser(usernameOrEmail string, password string) (User, error) {
 	// 通过用户名或邮箱获取用户信息
 	o := orm.NewOrm()
-	user := User{Username: username_or_email}
+	user := User{Username: usernameOrEmail}
 	err := o.Read(&user, "Username")
-	if err == orm.ErrNoRows {
-		user = User{Email: username_or_email}
+	if errors.Is(err, orm.ErrNoRows) {
+		user = User{Email: usernameOrEmail}
 		err = o.Read(&user, "Email")
-		if err == orm.ErrNoRows {
+		if errors.Is(err, orm.ErrNoRows) {
 			return user, err
 		}
 	}

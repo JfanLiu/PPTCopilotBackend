@@ -16,7 +16,7 @@ func (this *Controller) GetFiles() {
 		return
 	}
 
-	files, err := models.GetFiles(id)
+	files, err := models.GetAllFilesOfProj(id)
 	if err != nil {
 
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)

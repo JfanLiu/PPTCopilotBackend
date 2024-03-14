@@ -30,34 +30,6 @@ type ProjectResponse struct {
 	Updated     string
 }
 
-// TODO:优化此函数
-// RefactProjects 函数通过creatorid取creator信息
-func RefactProjects(projects []Project) []Project {
-	// 使用 for 循环遍历项目列表中的每个项目
-	for i, project := range projects {
-		// 获取项目的创建者信息，并创建一个新的 User 结构体
-		creator_temp, _ := GetUser(project.Creator.Id)
-		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
-
-		// TODO:这里的赋值好像无效
-		projects[i].Name = project.Name
-		projects[i].Description = project.Description
-		projects[i].Visible = project.Visible
-		projects[i].Creator = &creator
-		projects[i].Star = project.Star
-	}
-	// 返回更新后的项目列表
-	return projects
-}
-
-func RefactProject(project Project) Project {
-	creator_temp, _ := GetUser(project.Creator.Id)
-	creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
-	project.Creator = &creator
-
-	return project
-}
-
 func CreateProject(name string, description string, creator_id int, visible bool) (Project, error) {
 	o := orm.NewOrm()
 	var creator User
@@ -111,35 +83,12 @@ func UpdateProjectVisible(id int, visible bool) (Project, error) {
 	return project, err
 }
 
-func IncProjectStar(id int) (Project, error) {
-	o := orm.NewOrm()
-	project := Project{Id: id}
-	err := o.Read(&project)
-	if err == nil {
-		project.Star = project.Star + 1
-		_, err := o.Update(&project)
-		return project, err
-	}
-	return project, err
-}
-
-func DecProjectStar(id int) (Project, error) {
-	o := orm.NewOrm()
-	project := Project{Id: id}
-	err := o.Read(&project)
-	if err == nil {
-		project.Star = project.Star - 1
-		_, err := o.Update(&project)
-		return project, err
-	}
-	return project, err
-}
-
 func GetProject(id int) (Project, error) {
 	o := orm.NewOrm()
 	// 查找，使用
 	var project Project
-	err := o.QueryTable("project").Filter("id", id).One(&project)
+	err := o.QueryTable("project").Filter("id", id).RelatedSel().One(&project)
+	project.Creator.Password = "" // 隐藏用户密码
 	return project, err
 }
 
@@ -153,7 +102,10 @@ func GetProjects(id int) ([]Project, error) {
 func GetAllProjects() []Project {
 	o := orm.NewOrm()
 	var projects []Project
-	o.QueryTable("project").All(&projects)
+	o.QueryTable("project").RelatedSel().All(&projects)
+	for _, project := range projects {
+		project.Creator.Password = "" // 隐藏用户密码
+	}
 	return projects
 }
 
@@ -192,6 +144,13 @@ func SearchProjects(keywords []string) ([]Project, error) {
 	_, err := o.Raw(sql).QueryRows(&projects)
 	if err != nil {
 		return nil, err
+	}
+
+	// 根据id获取没有密码的user信息
+	for i, project := range projects {
+		creator_temp, _ := GetUser(project.Creator.Id)
+		creator := User{Id: creator_temp.Id, Username: creator_temp.Username, Email: creator_temp.Email}
+		projects[i].Creator = &creator
 	}
 
 	return projects, nil
@@ -242,6 +201,30 @@ func UnstarProject(user_id int, project_id int) (Favorite, error) {
 		}
 	}
 	return favorite, nil
+}
+
+func IncProjectStar(id int) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Star = project.Star + 1
+		_, err := o.Update(&project)
+		return project, err
+	}
+	return project, err
+}
+
+func DecProjectStar(id int) (Project, error) {
+	o := orm.NewOrm()
+	project := Project{Id: id}
+	err := o.Read(&project)
+	if err == nil {
+		project.Star = project.Star - 1
+		_, err := o.Update(&project)
+		return project, err
+	}
+	return project, err
 }
 
 func RefactProjectTime(project Project) ProjectResponse {

@@ -23,6 +23,7 @@ type File struct {
 	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
 
+// RefactFiles 根据project_id获取project详细信息
 func RefactFiles(files []File) []File {
 	for i, file := range files {
 		project_temp, _ := GetProject(file.Project.Id)
@@ -35,12 +36,12 @@ func RefactFiles(files []File) []File {
 	return files
 }
 
-func GetFile(file_name string, id int) (File, error) {
+func GetFileOfProj(file_name string, id int) (File, error) {
 	//找到该项目下的所有file
-	files, err := GetFiles(id)
+	files, err := GetAllFilesOfProj(id)
 
 	if err == nil {
-		//遍历所有file，找有无重名
+		//遍历所有file，找是否存在
 		for _, file := range files {
 			if file_name == file.Name {
 				return file, nil
@@ -51,13 +52,15 @@ func GetFile(file_name string, id int) (File, error) {
 	return File{}, err
 }
 
-func GetFiles(id int) ([]File, error) {
+// GetAllFilesOfProj 获取某个project下所有的file
+func GetAllFilesOfProj(project_id int) ([]File, error) {
 	o := orm.NewOrm()
 	var files []File
-	_, err := o.QueryTable("file").Filter("project_id", id).All(&files)
+	_, err := o.QueryTable("file").Filter("project_id", project_id).All(&files)
 	return files, err
 }
 
+// TODO：重构
 func CreateFile(name string, project_id int) (File, error) {
 	o := orm.NewOrm()
 	var project Project
@@ -69,7 +72,8 @@ func CreateFile(name string, project_id int) (File, error) {
 		return File{}, err
 	}
 
-	_file, _ := GetFile(name, project_id)
+	// 文件存在，更新文件，修改更新时间
+	_file, _ := GetFileOfProj(name, project_id)
 	if _file.Name == name {
 		//更新时间
 		_file.Updated = time.Now()
@@ -77,6 +81,7 @@ func CreateFile(name string, project_id int) (File, error) {
 		return _file, err
 	}
 
+	// 文件不存在，创建文件
 	file := File{Name: name, Project: &project}
 	// 创建文件结构
 	_, err = o.Insert(&file)
@@ -93,7 +98,7 @@ func DeleteDir(project_id int) error {
 }
 
 func DeleteFile(file_name string, project_id int) error {
-	file, err := GetFile(file_name, project_id)
+	file, err := GetFileOfProj(file_name, project_id)
 	if err != nil {
 		// 文件不存在
 		return err
@@ -185,7 +190,7 @@ func SaveJsonsToFile(data interface{}, file_name string, project_id int) error {
 func UpdateFileName(project_id int, old_file_name string, new_file_name string) (File, error) {
 	o := orm.NewOrm()
 	// 如果新文件名已存在
-	_, err := GetFile(new_file_name, project_id)
+	_, err := GetFileOfProj(new_file_name, project_id)
 	if err == nil {
 		return File{}, errors.New("文件名已存在")
 	}
@@ -210,7 +215,7 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 		}
 	}
 
-	file, err := GetFile(old_file_name, project_id)
+	file, err := GetFileOfProj(old_file_name, project_id)
 	if err != nil {
 		return File{}, err
 	}
