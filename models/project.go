@@ -109,6 +109,17 @@ func GetAllProjects() []Project {
 	return projects
 }
 
+// 获取所有公开的项目
+func GetAllPublicProjects() []Project {
+	o := orm.NewOrm()
+	var projects []Project
+	o.QueryTable("project").Filter("visible", true).RelatedSel().All(&projects)
+	for _, project := range projects {
+		project.Creator.Password = "" // 隐藏用户密码
+	}
+	return projects
+}
+
 func DeleteProject(id int) error {
 	o := orm.NewOrm()
 	project := Project{Id: id}

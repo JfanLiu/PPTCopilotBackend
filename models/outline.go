@@ -67,13 +67,13 @@ func ReformatXML(xmlStr string) string {
 	return matches[0] // 返回第一个匹配的 XML 标签
 }
 
-// P 结构体表示 XML 中的 <p> 元素
+// 表示 XML 中的 <p> 元素
 type P struct {
 	XMLName xml.Name `xml:"p"`
 	Content string   `xml:",innerxml"`
 }
 
-// Slide 结构体表示 XML 中的 <section> 元素
+// 表示 XML 中的 <section> 元素
 type Slide struct {
 	XMLName xml.Name `xml:"section"`    // XML 元素名称为 section
 	Class   string   `xml:"class,attr"` // class 属性
