@@ -140,11 +140,12 @@ func DeleteProject(id int) error {
 	return nil
 }
 
+// 搜索结果只返回public的项目
 func SearchProjects(keywords []string) ([]Project, error) {
 	o := orm.NewOrm()
 
 	// 构造 SQL 语句
-	sql := "SELECT * FROM project WHERE 1=1"
+	sql := "SELECT * FROM project WHERE visible=true"
 	for _, keyword := range keywords {
 		// 使用 OR 连接多个关键词
 		sql += fmt.Sprintf(" AND (name LIKE '%%%s%%' OR description LIKE '%%%s%%')", keyword, keyword)
