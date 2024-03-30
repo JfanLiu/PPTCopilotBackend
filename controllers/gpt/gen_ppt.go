@@ -41,7 +41,7 @@ func (this *Controller) GenPPT() {
 	}
 
 	// TODO：调试部分代码的复用
-	debug := 1
+	debug := 0
 	if debug == 1 {
 		outlinexml := `<slides>
     	<section class='cover'>

@@ -25,7 +25,7 @@ func (this *Controller) GenOutline() {
 	prompt = strings.ReplaceAll(prompt, "{{sponsor}}", request.Sponsor)
 
 	outline_str := ``
-	debug := 1 // 调试模式
+	debug := 0 // 调试模式
 	if debug == 1 {
 		// 如果调试模式开启，则使用固定的大纲字符串
 		// 粥p差不多得了
