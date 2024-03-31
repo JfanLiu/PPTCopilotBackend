@@ -18,7 +18,7 @@ COPY go.mod go.sum ./
 RUN go env -w GO111MODULE=on && go env -w GOPROXY=https://goproxy.cn
 RUN go install github.com/beego/bee/v2@latest && go mod download && go mod verify
 
-COPY . .
+#COPY . .
 # 因为挂载，不必把项目文件复制进来
 
 # 如果没有docker-compose未传递，使用默认值host.docker.internal
@@ -34,5 +34,5 @@ ENV SERVER_IP=${SERVER_IP}
 # RUN python3 env.py $SERVER_IP 由于挂载，此时容器里还没有env.py
 
 
-CMD ["bee", "run"]
-#ENTRYPOINT [ "./start.sh" ]
+#CMD ["bee", "run"]
+ENTRYPOINT [ "./start.sh" ]
