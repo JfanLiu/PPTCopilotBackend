@@ -25,7 +25,7 @@ func (this *Controller) GenOutline() {
 	prompt = strings.ReplaceAll(prompt, "{{sponsor}}", request.Sponsor)
 
 	outline_str := ``
-	debug := 1 // 调试模式
+	debug := 0 // 调试模式
 	if debug == 1 {
 		// 如果调试模式开启，则使用固定的大纲字符串
 		// 粥p差不多得了
@@ -66,7 +66,7 @@ func (this *Controller) GenOutline() {
 	} else {
 		// 如果调试模式未开启，则请求 GPT 模型生成大纲
 		var err error
-		outline_str, err = RequestGpt(prompt, SlidesXML{}) //<slide></slide>
+		outline_str, err = RequestGptXml(prompt, SlidesXML{}) //<slide></slide>
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline_str)
 			this.ServeJSON()

@@ -29,7 +29,7 @@ func (this *Controller) GenTasks() {
 	template := conf.GetTasksGeneratePromptTemplate()
 	template = strings.ReplaceAll(template, "{{prompt}}", request.Prompt)
 
-	tasksXML, err := gpt.RequestGpt(template, TasksXML{}) // <tasks></tasks>
+	tasksXML, err := gpt.RequestGptXml(template, TasksXML{}) // <tasks></tasks>
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()

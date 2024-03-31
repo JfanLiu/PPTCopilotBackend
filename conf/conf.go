@@ -12,6 +12,7 @@ type GptConfig struct {
 	GuideSinglePromptTemplate   string
 	UpdateSinglePromptTemplate  string
 	TasksGeneratePromptTemplate string
+	ChangeStylePromptTemplate   string
 }
 
 type EmailVerifyConfig struct {
@@ -49,6 +50,7 @@ func init() {
 		GuideSinglePromptTemplate:   cfg.Section("").Key("guide_single_prompt_template").String(),
 		UpdateSinglePromptTemplate:  cfg.Section("").Key("single_page_prompt_template").String(),
 		TasksGeneratePromptTemplate: cfg.Section("").Key("tasks_generate_prompt_template").String(),
+		ChangeStylePromptTemplate:   cfg.Section("").Key("change_style_prompt_template").String(),
 	}
 
 	EmailVerifyConfigInstance = EmailVerifyConfig{
@@ -95,6 +97,10 @@ func GetGuideSinglePromptTemplate() string {
 
 func GetTasksGeneratePromptTemplate() string {
 	return GptConfigInstance.TasksGeneratePromptTemplate
+}
+
+func GetChangeStylePromptTemplate() string {
+	return GptConfigInstance.ChangeStylePromptTemplate
 }
 
 func GetMailer() string {

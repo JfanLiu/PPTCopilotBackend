@@ -22,7 +22,7 @@ func (this *Controller) UpdateSlide() {
 	template = strings.ReplaceAll(template, "{{prompt}}", request.Prompt)
 	template = strings.ReplaceAll(template, "{{slide}}", request.Slide)
 
-	updated_slide, err := RequestGpt(template, SectionXML{}) // <section></section>
+	updated_slide, err := RequestGptXml(template, SectionXML{}) // <section></section>
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
