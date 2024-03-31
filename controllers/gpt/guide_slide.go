@@ -20,8 +20,8 @@ func (this *Controller) GuideSlide() {
 	template := conf.GetGuideSinglePromptTemplate()
 	template = strings.ReplaceAll(template, "{{outline}}", request.Outline)
 
-	// 调用 RequestGpt 函数生成GuideSlide内容
-	guide_slide, err := RequestGpt(template, SectionXML{}) // <section></section>
+	// 调用 RequestGptXml 函数生成GuideSlide内容
+	guide_slide, err := RequestGptXml(template, SectionXML{}) // <section></section>
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()

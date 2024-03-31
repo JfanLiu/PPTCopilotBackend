@@ -66,7 +66,7 @@ func (this *Controller) GenOutline() {
 	} else {
 		// 如果调试模式未开启，则请求 GPT 模型生成大纲
 		var err error
-		outline_str, err = RequestGpt(prompt, SlidesXML{}) //<slide></slide>
+		outline_str, err = RequestGptXml(prompt, SlidesXML{}) //<slide></slide>
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), outline_str)
 			this.ServeJSON()

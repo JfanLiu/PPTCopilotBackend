@@ -3,14 +3,16 @@ package conf
 import "gopkg.in/ini.v1"
 
 type GptConfig struct {
-	GptApiUrl                  string
-	GptModel                   string
-	GptProxy                   string
-	GptApiKey                  string
-	GptApiKeys                 []string
-	OutlinePromptTemplate      string
-	GuideSinglePromptTemplate  string
-	UpdateSinglePromptTemplate string
+	GptApiUrl                   string
+	GptModel                    string
+	GptProxy                    string
+	GptApiKey                   string
+	GptApiKeys                  []string
+	OutlinePromptTemplate       string
+	GuideSinglePromptTemplate   string
+	UpdateSinglePromptTemplate  string
+	TasksGeneratePromptTemplate string
+	ChangeStylePromptTemplate   string
 }
 
 type EmailVerifyConfig struct {
@@ -39,14 +41,16 @@ func init() {
 
 	// 读取配置项
 	GptConfigInstance = GptConfig{
-		GptApiUrl:                  cfg.Section("").Key("gpt_api_url").String(),
-		GptModel:                   cfg.Section("").Key("gpt_model").String(),
-		GptProxy:                   cfg.Section("").Key("gpt_proxy").String(),
-		GptApiKey:                  cfg.Section("").Key("gpt_api_key").String(),
-		GptApiKeys:                 cfg.Section("").Key("gpt_api_keys").Strings(","),
-		OutlinePromptTemplate:      cfg.Section("").Key("outline_prompt_template").String(),
-		GuideSinglePromptTemplate:  cfg.Section("").Key("guide_single_prompt_template").String(),
-		UpdateSinglePromptTemplate: cfg.Section("").Key("single_page_prompt_template").String(),
+		GptApiUrl:                   cfg.Section("").Key("gpt_api_url").String(),
+		GptModel:                    cfg.Section("").Key("gpt_model").String(),
+		GptProxy:                    cfg.Section("").Key("gpt_proxy").String(),
+		GptApiKey:                   cfg.Section("").Key("gpt_api_key").String(),
+		GptApiKeys:                  cfg.Section("").Key("gpt_api_keys").Strings(","),
+		OutlinePromptTemplate:       cfg.Section("").Key("outline_prompt_template").String(),
+		GuideSinglePromptTemplate:   cfg.Section("").Key("guide_single_prompt_template").String(),
+		UpdateSinglePromptTemplate:  cfg.Section("").Key("single_page_prompt_template").String(),
+		TasksGeneratePromptTemplate: cfg.Section("").Key("tasks_generate_prompt_template").String(),
+		ChangeStylePromptTemplate:   cfg.Section("").Key("change_style_prompt_template").String(),
 	}
 
 	EmailVerifyConfigInstance = EmailVerifyConfig{
@@ -89,6 +93,14 @@ func GetUpdateSinglePromptTemplate() string {
 
 func GetGuideSinglePromptTemplate() string {
 	return GptConfigInstance.GuideSinglePromptTemplate
+}
+
+func GetTasksGeneratePromptTemplate() string {
+	return GptConfigInstance.TasksGeneratePromptTemplate
+}
+
+func GetChangeStylePromptTemplate() string {
+	return GptConfigInstance.ChangeStylePromptTemplate
 }
 
 func GetMailer() string {
