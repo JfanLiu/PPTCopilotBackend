@@ -5,7 +5,6 @@ import (
 	"backend/controllers"
 	"backend/controllers/gpt"
 	"encoding/json"
-	"fmt"
 	"strings"
 )
 
@@ -24,7 +23,6 @@ func (this *Controller) ChangeStyle() {
 	var request ChangeStyleRequest
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
-	// 生成任务列表
 	template := conf.GetChangeStylePromptTemplate()
 	template = strings.ReplaceAll(template, "{{prompt}}", request.Prompt)
 
@@ -51,7 +49,7 @@ func (this *Controller) ChangeStyle() {
 		return
 	}
 
-	fmt.Println(styles)
+	//fmt.Println(styles)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", styles)
 	this.ServeJSON()
