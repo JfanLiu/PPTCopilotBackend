@@ -79,6 +79,7 @@ func init() {
 	agentController := beego.NewNamespace("/agent",
 		beego.NSRouter("/gen_tasks", &agent.Controller{}, "post:GenTasks"),
 		beego.NSRouter("/change_style", &agent.Controller{}, "post:ChangeStyle"),
+		beego.NSRouter("/add_text", &agent.Controller{}, "post:AddText"),
 	)
 	beego.AddNamespace(agentController)
 

@@ -174,8 +174,8 @@ func RequestGptJson(prompt string, genJsonType interface{}) (string, error) {
 	fmt.Println(body)
 
 	req_url := conf.GetGptApiUrl()
-	//req.SetProxyUrl("http://host.docker.internal:7890")
-	req.SetProxyUrl(conf.GetGptProxy())
+	req.SetProxyUrl("http://host.docker.internal:7890")
+	//req.SetProxyUrl(conf.GetGptProxy())
 
 	// 最多尝试2次
 	retryCount := 0

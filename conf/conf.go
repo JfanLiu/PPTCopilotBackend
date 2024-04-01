@@ -13,6 +13,7 @@ type GptConfig struct {
 	UpdateSinglePromptTemplate  string
 	TasksGeneratePromptTemplate string
 	ChangeStylePromptTemplate   string
+	AddTextPromptTemplate       string
 }
 
 type EmailVerifyConfig struct {
@@ -51,6 +52,7 @@ func init() {
 		UpdateSinglePromptTemplate:  cfg.Section("").Key("single_page_prompt_template").String(),
 		TasksGeneratePromptTemplate: cfg.Section("").Key("tasks_generate_prompt_template").String(),
 		ChangeStylePromptTemplate:   cfg.Section("").Key("change_style_prompt_template").String(),
+		AddTextPromptTemplate:       cfg.Section("").Key("add_text_prompt_template").String(),
 	}
 
 	EmailVerifyConfigInstance = EmailVerifyConfig{
@@ -100,6 +102,10 @@ func GetTasksGeneratePromptTemplate() string {
 }
 
 func GetChangeStylePromptTemplate() string {
+	return GptConfigInstance.ChangeStylePromptTemplate
+}
+
+func GetAddTextPromptTemplate() string {
 	return GptConfigInstance.ChangeStylePromptTemplate
 }
 
