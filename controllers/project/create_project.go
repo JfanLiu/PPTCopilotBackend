@@ -4,6 +4,7 @@ import (
 	"backend/controllers"
 	"backend/models"
 	"encoding/json"
+	"fmt"
 )
 
 type CreateProjectRequest struct {
@@ -23,6 +24,9 @@ func (this *Controller) CreateProject() {
 	}
 	// 获取cookie
 	token, err := this.Ctx.Request.Cookie("token")
+	fmt.Println(this.Ctx.Request.Cookie("token"))
+	fmt.Println(this.Ctx.Request.Header.Get("token"))
+
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
 		this.ServeJSON()

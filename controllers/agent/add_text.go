@@ -6,6 +6,7 @@ import (
 	"backend/controllers/gpt"
 	"encoding/json"
 	"strings"
+	"fmt"
 )
 
 // 添加文本框时，该页ppt内现有的文本框
@@ -40,6 +41,7 @@ func (this *Controller) AddText() {
 	template = strings.ReplaceAll(template, "{{slide}}", textsStr)
 
 	newTextStr, err := gpt.RequestGpt(template)
+	fmt.Println(newTextStr, err)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
@@ -48,13 +50,14 @@ func (this *Controller) AddText() {
 
 	var newText []TextBox
 	err = json.Unmarshal([]byte(newTextStr), &newText)
+	fmt.Println(2,err)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
-	//fmt.Println(newText)
+	fmt.Println(newText)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", newText)
 	this.ServeJSON()

@@ -38,5 +38,5 @@ func (this *Controller) Login() {
 		"code":    controllers.OK,
 		"message": "success",
 		"token":   tokenString, "data": user}
-	this.ServeJSON()
+	this.ServeJSON()  
 }
