@@ -80,6 +80,7 @@ func init() {
 		beego.NSRouter("/gen_tasks", &agent.Controller{}, "post:GenTasks"),
 		beego.NSRouter("/change_style", &agent.Controller{}, "post:ChangeStyle"),
 		beego.NSRouter("/add_text", &agent.Controller{}, "post:AddText"),
+		beego.NSRouter("/get_image", &agent.Controller{}, "post:GetImage"),
 	)
 	beego.AddNamespace(agentController)
 
