@@ -18,6 +18,7 @@ func (this *Controller) GetImage() {
 	var request GetImageRequest
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
+	fmt.Println(request)
 	images := QueryImage(request.Keyword)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", images)
@@ -90,7 +91,8 @@ func inferenceQuery(client *ha3engine.Client, context string) []string {
 	var _ = json.Unmarshal([]byte(*response.Body), &opensearchResponse)
 
 	// 输出正常返回的 response 内容
-	fmt.Println(opensearchResponse.Result[0].Id)
+	fmt.Println(*response.Body)
+	fmt.Println(opensearchResponse)
 
 	// 去数据库中取图片base64
 	var images []string

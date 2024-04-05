@@ -106,7 +106,7 @@ func GetChangeStylePromptTemplate() string {
 }
 
 func GetAddTextPromptTemplate() string {
-	return GptConfigInstance.ChangeStylePromptTemplate
+	return GptConfigInstance.AddTextPromptTemplate
 }
 
 func GetMailer() string {

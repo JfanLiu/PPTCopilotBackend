@@ -5,8 +5,8 @@ import (
 )
 
 type Image struct {
-	Id    int    `orm:"auto;pk"`
-	Image string `orm:"type(mediumtext)"`
+	Id    int    `orm:"pk"`
+	Image string `orm:"type(text)"`
 }
 
 func GetBase64ById(id int) (string, error) {
