@@ -39,7 +39,6 @@ func (this *Controller) AddText() {
 	textsStr = strings.Replace(textsStr, "\\u0026", "&", -1)
 
 	template = strings.ReplaceAll(template, "{{slide}}", textsStr)
-
 	newTextStr, err := gpt.RequestGpt(template)
 	fmt.Println(newTextStr, err)
 	if err != nil {
