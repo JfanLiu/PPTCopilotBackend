@@ -46,6 +46,7 @@ func init() {
 	orm.RegisterModel(new(File))
 	orm.RegisterModel(new(Favorite))
 	orm.RegisterModel(new(Template))
+	orm.RegisterModel(new(Image))
 
 	// 如果表不存在则创建表
 	orm.RunSyncdb("default", false, true)
