@@ -4,20 +4,19 @@ import (
 	"backend/conf"
 	"backend/controllers"
 	"backend/controllers/gpt"
-	"backend/models"
 	"encoding/json"
-	"encoding/xml"
+	"fmt"
 	"strings"
 )
 
-type TasksXML struct {
-	XMLName xml.Name `xml:"tasks"`
-	Task    []string `xml:"task"`
+type Task struct {
+	TaskName string `json:"task_name"`
+	Prompt   string `json:"prompt"`
 }
 
 type GenTaskRequest struct {
-	Prompt string `json:"prompt"`
 	Slide  string `json:"slide"`
+	Prompt string `json:"prompt"`
 }
 
 func (this *Controller) GenTasks() {
@@ -28,23 +27,21 @@ func (this *Controller) GenTasks() {
 	// 生成任务列表
 	template := conf.GetTasksGeneratePromptTemplate()
 	template = strings.ReplaceAll(template, "{{prompt}}", request.Prompt)
+	template = strings.ReplaceAll(template, "{{slide}}", request.Slide)
 
-	tasksXML, err := gpt.RequestGptXml(template, TasksXML{}) // <tasks></tasks>
+	tasksStr, err := gpt.RequestGpt(template)
+
+	fmt.Println(tasksStr)
+
+	var tasks []Task
+	err = json.Unmarshal([]byte(tasksStr), &tasks)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
 
-	tasksXML = models.ReformatXML(tasksXML)
-
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", tasksXML)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", tasks)
 	this.ServeJSON()
-
-	// 将xml格式的任务列表转换为结构体
-
-	// 执行每个任务
-
-	// 进行任务评价
 
 }
