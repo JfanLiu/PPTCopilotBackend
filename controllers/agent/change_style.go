@@ -34,7 +34,7 @@ func (this *Controller) ChangeStyle() {
 
 	template = strings.ReplaceAll(template, "{{slide}}", slideStr)
 
-	changedSlideStr, err := gpt.RequestGpt(template)
+	changedSlideStr, err := gpt.RequestGptJson(template, []Style{})
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()

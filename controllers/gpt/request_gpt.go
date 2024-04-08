@@ -3,6 +3,7 @@ package gpt
 import (
 	"backend/conf"
 	"backend/models"
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"reflect"
@@ -137,7 +138,7 @@ func RequestGptXml(prompt string, genXmlType interface{}) (string, error) {
 func JsonErrorScanner(gptResponse string, genJSONType interface{}) (string, error) {
 	// 确保程序按照genJSONType的类型进行解析
 	value := reflect.New(reflect.TypeOf(genJSONType)).Interface()
-	err := xml.Unmarshal([]byte(gptResponse), value)
+	err := json.Unmarshal([]byte(gptResponse), value)
 	if err != nil {
 		return "", fmt.Errorf("genJSONType格式与gptResponse不匹配: %s", err.Error())
 	}
@@ -152,7 +153,6 @@ func JsonErrorScanner(gptResponse string, genJSONType interface{}) (string, erro
 }
 
 // 用prompt请求gpt，返回结果的格式为json
-// TODO：有bug
 func RequestGptJson(prompt string, genJsonType interface{}) (string, error) {
 	var apikey string
 
