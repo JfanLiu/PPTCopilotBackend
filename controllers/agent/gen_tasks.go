@@ -36,11 +36,12 @@ func (this *Controller) GenTasks() {
 	var tasks []Task
 	err = json.Unmarshal([]byte(tasksStr), &tasks)
 	if err != nil {
+		fmt.Println("err task", err)
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
 		return
 	}
-
+	fmt.Println("success task")
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", tasks)
 	this.ServeJSON()
 
