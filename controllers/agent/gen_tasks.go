@@ -29,7 +29,7 @@ func (this *Controller) GenTasks() {
 	template = strings.ReplaceAll(template, "{{prompt}}", request.Prompt)
 	template = strings.ReplaceAll(template, "{{slide}}", request.Slide)
 
-	tasksStr, err := gpt.RequestGpt(template)
+	tasksStr, err := gpt.RequestGptJson(template, []Task{})
 
 	fmt.Println(tasksStr)
 

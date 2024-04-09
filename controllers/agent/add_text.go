@@ -39,8 +39,8 @@ func (this *Controller) AddText() {
 	textsStr = strings.Replace(textsStr, "\\u0026", "&", -1)
 
 	template = strings.ReplaceAll(template, "{{slide}}", textsStr)
-	newTextStr, err := gpt.RequestGpt(template)
-	fmt.Println(newTextStr, err)
+
+	newTextStr, err := gpt.RequestGptJson(template, []TextBox{})
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
 		this.ServeJSON()
