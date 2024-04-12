@@ -13,6 +13,7 @@ type GenPPTRequest struct {
 	TemplateId int    `json:"template_id"` // 模板 ID
 	ProjectId  int    `json:"project_id"`  // 项目 ID
 	FileName   string `json:"file_name"`   // 文件名
+	Visible    bool   `json:"visible"`     // 可见性（公开或私有）
 }
 
 // GenPPT 方法用于生成 PPT
@@ -40,7 +41,6 @@ func (this *Controller) GenPPT() {
 		return
 	}
 
-	// TODO：调试部分代码的复用
 	debug := 0
 	if debug == 1 {
 		outlinexml := `<slides>
@@ -123,7 +123,7 @@ func (this *Controller) GenPPT() {
 			JsonRes[i] = models.GetObj(res[i])
 		}
 
-		file, err := models.CreateFile(fileName, projectId)
+		file, err := models.CreatePptFile(fileName, projectId, request.Visible)
 		if err != nil {
 			this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), file)
 			this.ServeJSON()
@@ -135,6 +135,10 @@ func (this *Controller) GenPPT() {
 			this.ServeJSON()
 			return
 		}
+
+		// 更新操作历史
+		userId := 1
+		err = models.UpdateHistory(userId, file.Id)
 
 		this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", JsonRes)
 		this.ServeJSON()
@@ -188,7 +192,7 @@ func (this *Controller) GenPPT() {
 		JsonRes[i] = models.GetObj(res[i])
 	}
 
-	file, err := models.CreateFile(fileName, projectId)
+	file, err := models.CreatePptFile(fileName, projectId, request.Visible)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), file)
 		this.ServeJSON()
@@ -200,6 +204,17 @@ func (this *Controller) GenPPT() {
 		this.ServeJSON()
 		return
 	}
+
+	// 更新操作历史
+	token, err := this.Ctx.Request.Cookie("token")
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
+		this.ServeJSON()
+		return
+	}
+	userId := models.GetUserId(token.Value)
+
+	err = models.UpdateHistory(userId, file.Id)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", JsonRes)
 	this.ServeJSON()

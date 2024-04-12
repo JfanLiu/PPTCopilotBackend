@@ -31,13 +31,13 @@ var EmailVerifyConfigInstance EmailVerifyConfig
 func init() {
 	cfg, err := ini.Load("./conf/gpt.conf")
 	if err != nil {
-		panic("Failed to read gpt config file: " + err.Error())
+		panic("Failed to read gpt config ppt: " + err.Error())
 	}
 
 	emailcfg, err := ini.Load("./conf/emailverify.conf")
 
 	if err != nil {
-		panic("Failed to read email config file: " + err.Error())
+		panic("Failed to read email config ppt: " + err.Error())
 	}
 
 	// 读取配置项

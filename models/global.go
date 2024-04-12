@@ -9,7 +9,7 @@ func DropAllTables() {
 	// 删除Project表
 	o.Raw("DROP TABLE IF EXISTS project").Exec()
 	// 删除File表
-	o.Raw("DROP TABLE IF EXISTS file").Exec()
+	o.Raw("DROP TABLE IF EXISTS ppt").Exec()
 	// 删除Outline表
 	o.Raw("DROP TABLE IF EXISTS outline").Exec()
 	// 删除Favorite表

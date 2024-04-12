@@ -30,8 +30,11 @@ func (this *Controller) GenTasks() {
 	template = strings.ReplaceAll(template, "{{slide}}", request.Slide)
 
 	tasksStr, err := gpt.RequestGptJson(template, []Task{})
-
-	fmt.Println(tasksStr)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.ServeJSON()
+		return
+	}
 
 	var tasks []Task
 	err = json.Unmarshal([]byte(tasksStr), &tasks)
@@ -41,7 +44,7 @@ func (this *Controller) GenTasks() {
 		this.ServeJSON()
 		return
 	}
-	fmt.Println("success task")
+
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", tasks)
 	this.ServeJSON()
 

@@ -51,7 +51,7 @@ func (this *Controller) CloneProject() {
 	}
 
 	// 创建项目文件夹
-	save_dir := models.GetSaveDir(project.Id)
+	save_dir := models.GetProjectSaveDir(project.Id)
 	err = os.MkdirAll(save_dir, 0777)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), 4)
@@ -62,7 +62,7 @@ func (this *Controller) CloneProject() {
 	// 创建项目文件
 	for _, file := range clone_files {
 		file_path := save_dir + "/" + file.Name
-		old_file_path := models.GetSaveDir(clone_id) + "/" + file.Name
+		old_file_path := models.GetProjectSaveDir(clone_id) + "/" + file.Name
 		//将原文件复制入新地址
 		err = models.CopyFile(old_file_path, file_path)
 

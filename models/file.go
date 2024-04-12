@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
@@ -19,6 +20,7 @@ type File struct {
 	Name string `orm:"size(100)"`
 	// Description string    `orm:"size(100)"`
 	Project *Project  `orm:"rel(fk)"` // 设置一对多的反向关系
+	Visible bool      `orm:"default(true)"`
 	Created time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated time.Time `orm:"auto_now;type(datetime)"`
 }
@@ -60,7 +62,6 @@ func GetAllFilesOfProj(project_id int) ([]File, error) {
 	return files, err
 }
 
-// TODO：重构
 func CreateFile(name string, project_id int) (File, error) {
 	o := orm.NewOrm()
 	var project Project
@@ -85,6 +86,34 @@ func CreateFile(name string, project_id int) (File, error) {
 	file := File{Name: name, Project: &project}
 	// 创建文件结构
 	_, err = o.Insert(&file)
+	return file, err
+}
+
+func CreatePptFile(name string, project_id int, visible bool) (File, error) {
+	o := orm.NewOrm()
+	var project Project
+	project.Id = project_id
+	// 根据id获取项目信息
+	err := o.Read(&project)
+	if err != nil {
+		// 项目不存在
+		return File{}, err
+	}
+
+	// 文件存在，更新文件，修改更新时间
+	_file, _ := GetFileOfProj(name, project_id)
+	if _file.Name == name {
+		//更新时间
+		_file.Updated = time.Now()
+		_, err = o.Update(&_file)
+		return _file, err
+	}
+
+	// 文件不存在，创建文件
+	file := File{Name: name, Project: &project, Visible: visible}
+	// 创建文件结构
+	_, err = o.Insert(&file)
+
 	return file, err
 }
 
@@ -135,7 +164,7 @@ func GetFilePathByName(file_name string, project_id int) string {
 	filePath := saveDir + "/" + file_name
 	return filePath
 }
-func GetSaveDir(project_id int) string {
+func GetProjectSaveDir(project_id int) string {
 	saveDir := "static/project/" + strconv.Itoa(project_id)
 	return saveDir
 }
@@ -163,7 +192,7 @@ func SaveJsonsToFile(data interface{}, file_name string, project_id int) error {
 		return err
 	}
 
-	saveDir := GetSaveDir(project_id)
+	saveDir := GetProjectSaveDir(project_id)
 	// 创建文件夹
 	err = os.MkdirAll(saveDir, 0777)
 	if err != nil {
@@ -235,4 +264,33 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 	}
 
 	return file, err
+}
+
+// 获取所有公开的ppt
+func GetAllPublicPpt() ([]File, error) {
+	o := orm.NewOrm()
+	var files []File
+	_, err := o.QueryTable("file").Filter("name__endswith", ".json").Filter("visible", 1).All(&files)
+	return files, err
+}
+
+// 搜索所有公开ppt
+func SearchAllPublicPpt(keywords []string) ([]File, error) {
+	o := orm.NewOrm()
+
+	// 构造 SQL 语句
+	sql := `SELECT * FROM file WHERE visible=true AND name LIKE '%.json'`
+	for _, keyword := range keywords {
+		// 使用 OR 连接多个关键词
+		sql += fmt.Sprintf("AND (name LIKE '%%%s%%')", keyword)
+	}
+
+	// 执行 SQL 查询
+	var files []File
+	_, err := o.Raw(sql).QueryRows(&files)
+	if err != nil {
+		return nil, err
+	}
+
+	return files, nil
 }

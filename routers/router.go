@@ -5,6 +5,7 @@ import (
 	"backend/controllers/agent"
 	"backend/controllers/email"
 	"backend/controllers/gpt"
+	"backend/controllers/ppt"
 	"backend/controllers/project"
 	"backend/controllers/template"
 	"backend/controllers/user"
@@ -41,9 +42,9 @@ func init() {
 		beego.NSRouter("/public", &project.Controller{}, "get:GetAllPublic"),
 		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;post:CloneProject;put:UpdateProject;delete:DeleteProject"),
 		beego.NSRouter("/:id/star", &project.Controller{}, "post:StarProject;delete:UnstarProject;get:GetStar"),
-		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
-		beego.NSRouter("/:id/file/update_name", &project.Controller{}, "post:UpdateFileName"),
-		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
+		beego.NSRouter("/:id/ppt", &project.Controller{}, "get:GetFiles;post:CreateFile"),
+		beego.NSRouter("/:id/ppt/update_name", &project.Controller{}, "post:UpdateFileName"),
+		beego.NSRouter("/:id/ppt/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
 		beego.NSRouter("/:id/json_file", &project.Controller{}, "post:CreateJsonFile"),
 		beego.NSRouter("/search", &project.Controller{}, "get:SearchProject"),
 	)
@@ -83,6 +84,15 @@ func init() {
 		beego.NSRouter("/get_image", &agent.Controller{}, "post:GetImage"),
 	)
 	beego.AddNamespace(agentController)
+
+	// file相关
+	pptController := beego.NewNamespace("/ppt",
+		beego.NSRouter("/get_all_public", &ppt.Controller{}, "get:GetAllPublicPpt"),
+		beego.NSRouter("/:id/upload_cover", &ppt.Controller{}, "post:UploadPptCover"),
+		beego.NSRouter("/search", &ppt.Controller{}, "get:SearchAllPublicPpt"),
+		beego.NSRouter("/:user_id/history", &ppt.Controller{}, "get:GetHistory;post:UpdateHistory"),
+	)
+	beego.AddNamespace(pptController)
 
 	// websocket相关
 	websocketController := beego.NewNamespace("/ws",

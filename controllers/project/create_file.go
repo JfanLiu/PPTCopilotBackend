@@ -17,7 +17,7 @@ func (this *Controller) CreateFile() {
 		return
 	}
 
-	save_dir := models.GetSaveDir(id)
+	save_dir := models.GetProjectSaveDir(id)
 	// 递归创建目录
 	err = os.MkdirAll(save_dir, 0777)
 	if err != nil {
