@@ -40,6 +40,11 @@ func (this *Controller) GenPPT() {
 	templateId := request.TemplateId
 	//projectId := request.ProjectId
 	project, err := models.GetDefaultProjectByUser(userId)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.ServeJSON()
+		return
+	}
 	projectId := project.Id
 	fileName := request.FileName
 

@@ -7,13 +7,15 @@ import (
 
 func (this *Controller) UpdateHistory() {
 
-	token, err := this.Ctx.Request.Cookie("token")
+	token := this.Ctx.Request.Header.Get("token")
+	err := models.CheckToken(token)
+
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
 		this.ServeJSON()
 		return
 	}
-	userId := models.GetUserId(token.Value)
+	userId := models.GetUserId(token)
 
 	fileId, err := this.GetInt("file_id")
 	if err != nil {
