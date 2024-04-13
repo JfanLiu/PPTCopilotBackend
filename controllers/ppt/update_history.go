@@ -25,11 +25,6 @@ func (this *Controller) UpdateHistory() {
 	}
 
 	filename := this.GetString("filename")
-	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
-		this.ServeJSON()
-		return
-	}
 
 	file, err := models.GetFileOfProj(filename, projectId)
 	if err != nil {
@@ -38,9 +33,18 @@ func (this *Controller) UpdateHistory() {
 		return
 	}
 
+	// 更新history表
 	err = models.UpdateHistory(userId, file.Id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "更新记录失败", nil)
+		this.ServeJSON()
+		return
+	}
+
+	// 更新file表
+	_, err = models.CreateFile(filename, projectId)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "更新file表失败", nil)
 		this.ServeJSON()
 		return
 	}
