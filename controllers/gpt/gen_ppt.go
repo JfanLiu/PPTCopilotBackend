@@ -206,13 +206,20 @@ func (this *Controller) GenPPT() {
 	}
 
 	// 更新操作历史
-	token, err := this.Ctx.Request.Cookie("token")
+	// token, err := this.Ctx.Request.Cookie("token")
+
+	token := this.Ctx.Request.Header.Get("token")
+	fmt.Println(token)
+	err = models.CheckToken(token)
+	fmt.Println(err)
+
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
 		this.ServeJSON()
 		return
 	}
-	userId := models.GetUserId(token.Value)
+	// userId := models.GetUserId(token.Value)
+	userId := models.GetUserId(token)
 
 	err = models.UpdateHistory(userId, file.Id)
 

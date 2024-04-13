@@ -18,13 +18,17 @@ func (this *Controller) CloneProject() {
 		return
 	}
 
-	token, err := this.Ctx.Request.Cookie("token")
+	// token, err := this.Ctx.Request.Cookie("token")
+	token := this.Ctx.Request.Header.Get("token")
+	err = models.CheckToken(token)
+
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
 		this.ServeJSON()
 		return
 	}
-	user_id := models.GetUserId(token.Value)
+	// user_id := models.GetUserId(token.Value)
+	user_id := models.GetUserId(token)
 
 	// 获取项目信息
 	clone_project, err := models.GetProject(clone_id)

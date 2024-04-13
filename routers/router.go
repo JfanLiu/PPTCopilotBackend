@@ -42,9 +42,9 @@ func init() {
 		beego.NSRouter("/public", &project.Controller{}, "get:GetAllPublic"),
 		beego.NSRouter("/:id", &project.Controller{}, "get:GetProject;post:CloneProject;put:UpdateProject;delete:DeleteProject"),
 		beego.NSRouter("/:id/star", &project.Controller{}, "post:StarProject;delete:UnstarProject;get:GetStar"),
-		beego.NSRouter("/:id/ppt", &project.Controller{}, "get:GetFiles;post:CreateFile"),
-		beego.NSRouter("/:id/ppt/update_name", &project.Controller{}, "post:UpdateFileName"),
-		beego.NSRouter("/:id/ppt/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
+		beego.NSRouter("/:id/file", &project.Controller{}, "get:GetFiles;post:CreateFile"),
+		beego.NSRouter("/:id/file/update_name", &project.Controller{}, "post:UpdateFileName"),
+		beego.NSRouter("/:id/file/:file_name", &project.Controller{}, "get:GetFile;delete:DeleteFile"),
 		beego.NSRouter("/:id/json_file", &project.Controller{}, "post:CreateJsonFile"),
 		beego.NSRouter("/search", &project.Controller{}, "get:SearchProject"),
 	)
