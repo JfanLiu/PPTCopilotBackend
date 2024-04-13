@@ -16,7 +16,6 @@ func (this *Controller) CreateUser() {
 	var request CreateUserRequest
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 	if request.Username == nil || request.Email == nil || request.Password == nil {
-
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
 		this.ServeJSON()
 		return
@@ -24,8 +23,15 @@ func (this *Controller) CreateUser() {
 
 	user, err := models.CreateUser(*request.Username, *request.Password, *request.Email)
 	if err != nil {
-
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.ServeJSON()
+		return
+	}
+
+	// 创建用户默认项目
+	_, err = models.CreateDefaultProject(user.Id)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "无法创建用户默认项目", nil)
 		this.ServeJSON()
 		return
 	}

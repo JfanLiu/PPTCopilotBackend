@@ -159,7 +159,10 @@ func DeleteFileByPath(path string) error {
 
 func GetFilePathByName(file_name string, project_id int) string {
 
-	saveDir := "static/project/" + strconv.Itoa(project_id)
+	saveDir := "static/project/" + strconv.Itoa(project_id) + "/" + file_name
+
+	// 创建文件夹
+	_ = os.MkdirAll(saveDir, 0777)
 
 	filePath := saveDir + "/" + file_name
 	return filePath
@@ -293,4 +296,12 @@ func SearchAllPublicPpt(keywords []string) ([]File, error) {
 	}
 
 	return files, nil
+}
+
+// 根据id获取文件
+func GetFileById(fileId int) (File, error) {
+	o := orm.NewOrm()
+	var file File
+	err := o.QueryTable("file").Filter("id", fileId).One(&file)
+	return file, err
 }

@@ -3,6 +3,7 @@ package models
 import (
 	"errors"
 	"fmt"
+	"strconv"
 	"time"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -18,6 +19,7 @@ type Project struct {
 	Visible     bool      `orm:"default(true)"`
 	Created     time.Time `orm:"auto_now_add;type(datetime)"`
 	Updated     time.Time `orm:"auto_now;type(datetime)"`
+	IsDefault   bool      `orm:"default(false)"`
 }
 type ProjectResponse struct {
 	Id          int
@@ -28,6 +30,7 @@ type ProjectResponse struct {
 	Visible     bool
 	Created     string
 	Updated     string
+	IsDefault   bool
 }
 
 func CreateProject(name string, description string, creator_id int, visible bool) (Project, error) {
@@ -41,9 +44,39 @@ func CreateProject(name string, description string, creator_id int, visible bool
 		return Project{}, err
 	}
 
-	project := Project{Name: name, Description: description, Creator: &creator, Visible: visible}
+	project := Project{Name: name, Description: description, Creator: &creator, Visible: visible, IsDefault: false}
 	// 创建项目
 	_, err = o.Insert(&project)
+	return project, err
+}
+
+// 创建用户默认项目
+func CreateDefaultProject(creator_id int) (Project, error) {
+	o := orm.NewOrm()
+	var creator User
+	creator.Id = creator_id
+	// 根据id获取用户信息
+	err := o.Read(&creator)
+	if err != nil {
+		// 用户不存在
+		return Project{}, err
+	}
+
+	projectName := "default" + strconv.Itoa(creator_id)
+
+	project := Project{Name: projectName, Description: "", Creator: &creator, Visible: true, IsDefault: true}
+	// 创建项目
+	_, err = o.Insert(&project)
+	return project, err
+}
+
+// 获取用户默认项目
+func GetDefaultProjectByUser(userId int) (Project, error) {
+	o := orm.NewOrm()
+	// 查找，使用
+	var project Project
+	err := o.QueryTable("project").Filter("creator_id", userId).Filter("is_default", true).RelatedSel().One(&project)
+	project.Creator.Password = "" // 隐藏用户密码
 	return project, err
 }
 
