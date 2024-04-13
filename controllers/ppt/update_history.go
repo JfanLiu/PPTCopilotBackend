@@ -17,14 +17,28 @@ func (this *Controller) UpdateHistory() {
 	}
 	userId := models.GetUserId(token)
 
-	fileId, err := this.GetInt("file_id")
+	projectId, err := this.GetInt("project_id")
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
 		this.ServeJSON()
 		return
 	}
 
-	err = models.UpdateHistory(userId, fileId)
+	filename := this.GetString("filename")
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "参数错误", nil)
+		this.ServeJSON()
+		return
+	}
+
+	file, err := models.GetFileOfProj(filename, projectId)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "获取文件失败", nil)
+		this.ServeJSON()
+		return
+	}
+
+	err = models.UpdateHistory(userId, file.Id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "更新记录失败", nil)
 		this.ServeJSON()

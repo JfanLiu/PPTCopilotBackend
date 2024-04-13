@@ -7,17 +7,17 @@ import (
 	"os"
 )
 
-// TODO: 重名、重复clone
 func (this *Controller) ClonePpt() {
 	// 获取用户
-	token, err := this.Ctx.Request.Cookie("token")
+	token := this.Ctx.Request.Header.Get("token")
+	err := models.CheckToken(token)
+
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
 		this.ServeJSON()
 		return
 	}
-	userId := models.GetUserId(token.Value)
-	//userId := 2
+	userId := models.GetUserId(token)
 
 	// 获取文件id
 	fileId, err := this.GetInt("file_id")
@@ -30,7 +30,7 @@ func (this *Controller) ClonePpt() {
 	// 获取ppt信息
 	source_file, err := models.GetFileById(fileId)
 	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, err.Error(), nil)
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "获取文件信息失败", nil)
 		this.ServeJSON()
 		return
 	}
@@ -40,6 +40,14 @@ func (this *Controller) ClonePpt() {
 	defaultProjectDir := models.GetProjectSaveDir(defaultProject.Id)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "无法获取用户默认项目", nil)
+		this.ServeJSON()
+		return
+	}
+
+	// 如果文件已存在
+	_, err = models.GetFileOfProj(source_file.Name, defaultProject.Id)
+	if err == nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "同名文件已经存在", nil)
 		this.ServeJSON()
 		return
 	}

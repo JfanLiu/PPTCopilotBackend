@@ -138,8 +138,11 @@ func DeleteFile(file_name string, project_id int) error {
 		return err //文件结构删除错误
 	}
 
-	path := GetFilePathByName(file_name, project_id)
-	err = DeleteFileByPath(path)
+	deletePath := "static/project/" + strconv.Itoa(project_id) + "/" + file_name
+	err = os.RemoveAll(deletePath)
+	if err != nil {
+		return err
+	}
 
 	if err != nil {
 		//文件删除错误
@@ -259,9 +262,17 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 	}
 
 	// 更新文件路径
-	old_path := GetFilePathByName(old_file_name, project_id)
-	new_path := GetFilePathByName(new_file_name, project_id)
+	old_path := "static/project/" + strconv.Itoa(project_id) + "/" + old_file_name + "/" + old_file_name
+	new_path := "static/project/" + strconv.Itoa(project_id) + "/" + old_file_name + "/" + new_file_name
 	err = os.Rename(old_path, new_path)
+	if err != nil {
+		return File{}, err
+	}
+
+	// 更新文件夹路径
+	old_dir := "static/project/" + strconv.Itoa(project_id) + "/" + old_file_name
+	new_dir := "static/project/" + strconv.Itoa(project_id) + "/" + new_file_name
+	err = os.Rename(old_dir, new_dir)
 	if err != nil {
 		return File{}, err
 	}
