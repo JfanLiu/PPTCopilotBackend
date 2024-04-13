@@ -23,16 +23,20 @@ func (this *Controller) CreateProject() {
 		return
 	}
 	// 获取cookie
-	token, err := this.Ctx.Request.Cookie("token")
-	fmt.Println(this.Ctx.Request.Cookie("token"))
-	fmt.Println(this.Ctx.Request.Header.Get("token"))
-
+	// token, err := this.Ctx.Request.Cookie("token")
+	// fmt.Println(token)
+	// fmt.Println(token.Value)
+	token := this.Ctx.Request.Header.Get("token")
+	fmt.Println(token)
+	err := models.CheckToken(token)
+	fmt.Println(err)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
 		this.ServeJSON()
 		return
 	}
-	id := models.GetUserId(token.Value)
+	// id := models.GetUserId(token.Value)
+	id := models.GetUserId(token)
 
 	//判断项目名是否为空串、或仅由空格和制表符组成的串
 	if len(*request.Name) == 0 {

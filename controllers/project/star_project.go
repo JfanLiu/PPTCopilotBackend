@@ -8,13 +8,16 @@ import (
 
 func (this *Controller) StarProject() {
 	// 获取cookie
-	token, err := this.Ctx.Request.Cookie("token")
+	// token, err := this.Ctx.Request.Cookie("token")
+	token := this.Ctx.Request.Header.Get("token")
+	err := models.CheckToken(token)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
 		this.ServeJSON()
 		return
 	}
-	id := models.GetUserId(token.Value)
+	// id := models.GetUserId(token.Value)
+	id := models.GetUserId(token)
 
 	id_ := this.Ctx.Input.Param(":id")
 	project_id, err := strconv.Atoi(id_)
