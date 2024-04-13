@@ -3,7 +3,6 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	beego "github.com/beego/beego/v2/server/web"
 	"os"
 
 	"github.com/beego/beego/v2/client/orm"
@@ -25,20 +24,20 @@ func init() {
 	// ---------------------------------
 
 	// 获取配置文件中的数据库地址
-	mysqlUrls, err := beego.AppConfig.String("mysqlurls")
-	fmt.Println("MYSQL_Urls: ", mysqlUrls)
-	orm.RegisterDataBase("default", "mysql", "root:admin@tcp("+mysqlUrls+")/now_db?charset=utf8&loc=Local")
+	//mysqlUrls, err := beego.AppConfig.String("mysqlurls")
+	//fmt.Println("MYSQL_Urls: ", mysqlUrls)
+	//orm.RegisterDataBase("default", "mysql", "root:admin@tcp("+mysqlUrls+")/now_db?charset=utf8&loc=Local")
 
 	// ---------------------------------
 	// 		 docker部署请使用以下代码
 	// ---------------------------------
 
 	// 获取环境变量
-	//mysqlHost := os.Getenv("MYSQL_HOST")
-	//mysqlPort := os.Getenv("MYSQL_PORT")
-	//fmt.Println("MYSQL_HOST: ", mysqlHost)
-	//fmt.Println("MYSQL_PORT: ", mysqlPort)
-	//orm.RegisterDataBase("default", "mysql", "root:admin@tcp("+mysqlHost+":"+mysqlPort+")/now_db?charset=utf8&loc=Local")
+	mysqlHost := os.Getenv("MYSQL_HOST")
+	mysqlPort := os.Getenv("MYSQL_PORT")
+	fmt.Println("MYSQL_HOST: ", mysqlHost)
+	fmt.Println("MYSQL_PORT: ", mysqlPort)
+	orm.RegisterDataBase("default", "mysql", "root:admin@tcp("+mysqlHost+":"+mysqlPort+")/now_db?charset=utf8&loc=Local")
 
 	// 注册定义的model
 	orm.RegisterModel(new(Outline))
