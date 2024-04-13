@@ -9,11 +9,11 @@ import (
 
 // GenPPTRequest 结构体定义了一个用于生成 PPT 的请求结构体
 type GenPPTRequest struct {
-	OutlineId  int    `json:"outline_id"`  // 大纲 ID
-	TemplateId int    `json:"template_id"` // 模板 ID
-	ProjectId  int    `json:"project_id"`  // 项目 ID
-	FileName   string `json:"file_name"`   // 文件名
-	Visible    bool   `json:"visible"`     // 可见性（公开或私有）
+	OutlineId  int `json:"outline_id"`  // 大纲 ID
+	TemplateId int `json:"template_id"` // 模板 ID
+	//ProjectId  int    `json:"project_id"`  // 项目 ID
+	FileName string `json:"file_name"` // 文件名
+	Visible  bool   `json:"visible"`   // 可见性（公开或私有）
 }
 
 // GenPPT 方法用于生成 PPT
@@ -21,10 +21,26 @@ func (this *Controller) GenPPT() {
 	var request GenPPTRequest
 	json.NewDecoder(this.Ctx.Request.Body).Decode(&request)
 
+	// 获取操作用户
+	token := this.Ctx.Request.Header.Get("token")
+	fmt.Println(token)
+	err := models.CheckToken(token)
+	fmt.Println(err)
+
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
+		this.ServeJSON()
+		return
+	}
+	// userId := models.GetUserId(token.Value)
+	userId := models.GetUserId(token)
+
 	// 获取请求中的大纲 ID、模板 ID、项目 ID 和文件名
 	outlineId := request.OutlineId
 	templateId := request.TemplateId
-	projectId := request.ProjectId
+	//projectId := request.ProjectId
+	project, err := models.GetDefaultProjectByUser(userId)
+	projectId := project.Id
 	fileName := request.FileName
 
 	// 从数据库中根据id获取大纲outline和模板template
@@ -206,21 +222,6 @@ func (this *Controller) GenPPT() {
 	}
 
 	// 更新操作历史
-	// token, err := this.Ctx.Request.Cookie("token")
-
-	token := this.Ctx.Request.Header.Get("token")
-	fmt.Println(token)
-	err = models.CheckToken(token)
-	fmt.Println(err)
-
-	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "未登录", nil)
-		this.ServeJSON()
-		return
-	}
-	// userId := models.GetUserId(token.Value)
-	userId := models.GetUserId(token)
-
 	err = models.UpdateHistory(userId, file.Id)
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", JsonRes)

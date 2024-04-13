@@ -83,7 +83,7 @@ func CreateFile(name string, project_id int) (File, error) {
 	}
 
 	// 文件不存在，创建文件
-	file := File{Name: name, Project: &project}
+	file := File{Name: name, Project: &project, Visible: true}
 	// 创建文件结构
 	_, err = o.Insert(&file)
 	return file, err

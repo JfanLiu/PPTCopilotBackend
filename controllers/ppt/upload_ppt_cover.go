@@ -5,6 +5,7 @@ import (
 	"strconv"
 )
 
+// 已弃用
 func (this *Controller) UploadPptCover() {
 
 	projectId, err := this.GetInt("project_id")
