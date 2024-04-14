@@ -280,6 +280,26 @@ func UpdateFileName(project_id int, old_file_name string, new_file_name string) 
 	return file, err
 }
 
+func UpdateFileVisible(fileId int, visible bool) error {
+	o := orm.NewOrm()
+	file := File{Id: fileId}
+
+	// 检查文件是否存在
+	if err := o.Read(&file); err != nil {
+		return err
+	}
+
+	// 更新可见性
+	file.Visible = visible
+
+	// 更新文件信息
+	if _, err := o.Update(&file); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // 获取所有公开的ppt
 func GetAllPublicPpt() ([]File, error) {
 	o := orm.NewOrm()

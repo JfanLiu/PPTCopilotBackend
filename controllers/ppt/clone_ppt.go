@@ -4,7 +4,9 @@ import (
 	"backend/controllers"
 	"backend/models"
 	"fmt"
+	"io"
 	"os"
+	"path/filepath"
 )
 
 func (this *Controller) ClonePpt() {
@@ -72,20 +74,88 @@ func (this *Controller) ClonePpt() {
 
 	// 创建文件夹
 	saveDir := defaultProjectDir + "/" + source_file.Name
-	_ = os.MkdirAll(saveDir, 0777)
+	err = os.MkdirAll(saveDir, 0777)
+	if err != nil {
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "创建文件夹失败", nil)
+		this.ServeJSON()
+		return
+	}
 
 	//将原文件复制入新地址
-	file_path := defaultProjectDir + "/" + source_file.Name + "/" + source_file.Name
-	old_file_path := models.GetProjectSaveDir(source_file.Project.Id) + "/" + source_file.Name + "/" + source_file.Name
-	fmt.Println(file_path)
+	//file_path := defaultProjectDir + "/" + source_file.Name + "/" + source_file.Name
+	old_file_path := models.GetProjectSaveDir(source_file.Project.Id) + "/" + source_file.Name
+	fmt.Println(saveDir)
 	fmt.Println(old_file_path)
-	err = models.CopyFile(old_file_path, file_path)
+	err = CopyDir(old_file_path, saveDir)
 	if err != nil {
-		this.Data["json"] = controllers.MakeResponse(controllers.Err, "文件写入失败", nil)
+		this.Data["json"] = controllers.MakeResponse(controllers.Err, "文件夹复制失败", nil)
 		this.ServeJSON()
 		return
 	}
 
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "success", nil)
 	this.ServeJSON()
+}
+
+func CopyDir(src, dest string) error {
+	source, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer source.Close()
+
+	info, err := source.Stat()
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(dest, info.Mode())
+	if err != nil {
+		return err
+	}
+
+	fileInfos, err := source.Readdir(-1)
+	if err != nil {
+		return err
+	}
+
+	for _, fileInfo := range fileInfos {
+		sourcePath := filepath.Join(src, fileInfo.Name())
+		destPath := filepath.Join(dest, fileInfo.Name())
+
+		if fileInfo.IsDir() {
+			err = CopyDir(sourcePath, destPath)
+			if err != nil {
+				return err
+			}
+		} else {
+			err = CopyFile(sourcePath, destPath)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func CopyFile(src, dest string) error {
+	source, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer source.Close()
+
+	destination, err := os.Create(dest)
+	if err != nil {
+		return err
+	}
+	defer destination.Close()
+
+	_, err = io.Copy(destination, source)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

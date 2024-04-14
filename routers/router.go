@@ -93,6 +93,7 @@ func init() {
 		beego.NSRouter("/search", &ppt.Controller{}, "get:SearchAllPublicPpt"),
 		beego.NSRouter("/history", &ppt.Controller{}, "get:GetHistory;post:UpdateHistory"),
 		beego.NSRouter("/clone", &ppt.Controller{}, "post:ClonePpt"),
+		beego.NSRouter("/visible", &ppt.Controller{}, "put:UpdatePptVisible"),
 	)
 	beego.AddNamespace(pptController)
 
