@@ -329,6 +329,28 @@ func SearchAllPublicPpt(keywords []string) ([]File, error) {
 	return files, nil
 }
 
+// 搜索某个用户的ppt
+func SearchPptOfProj(projectId int, keywords []string) ([]File, error) {
+	o := orm.NewOrm()
+
+	// 构造 SQL 语句
+	sql := `SELECT * FROM file WHERE name LIKE '%.json'`
+	sql += fmt.Sprintf("AND (project_id = %d)", projectId)
+	for _, keyword := range keywords {
+		// 使用 OR 连接多个关键词
+		sql += fmt.Sprintf("AND (name LIKE '%%%s%%')", keyword)
+	}
+
+	// 执行 SQL 查询
+	var files []File
+	_, err := o.Raw(sql).QueryRows(&files)
+	if err != nil {
+		return nil, err
+	}
+
+	return files, nil
+}
+
 // 根据id获取文件
 func GetFileById(fileId int) (File, error) {
 	o := orm.NewOrm()

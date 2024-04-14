@@ -91,6 +91,7 @@ func init() {
 		beego.NSRouter("/get_all_public", &ppt.Controller{}, "get:GetAllPublicPpt"),
 		beego.NSRouter("/upload_cover", &ppt.Controller{}, "post:UploadPptCover"),
 		beego.NSRouter("/search", &ppt.Controller{}, "get:SearchAllPublicPpt"),
+		beego.NSRouter("/search/user", &ppt.Controller{}, "get:SearchUserPpt"),
 		beego.NSRouter("/history", &ppt.Controller{}, "get:GetHistory;post:UpdateHistory"),
 		beego.NSRouter("/clone", &ppt.Controller{}, "post:ClonePpt"),
 		beego.NSRouter("/visible", &ppt.Controller{}, "put:UpdatePptVisible"),

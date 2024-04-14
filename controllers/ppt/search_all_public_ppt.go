@@ -13,7 +13,7 @@ func (this *Controller) SearchAllPublicPpt() {
 	keywords := strings.Split(filterWords, " ")
 
 	// 查询项目
-	projects, err := models.SearchAllPublicPpt(keywords)
+	files, err := models.SearchAllPublicPpt(keywords)
 
 	if err != nil {
 
@@ -22,7 +22,7 @@ func (this *Controller) SearchAllPublicPpt() {
 		return
 	}
 
-	this.Data["json"] = controllers.MakeResponse(controllers.OK, "获取ppt列表成功", projects)
+	this.Data["json"] = controllers.MakeResponse(controllers.OK, "获取ppt列表成功", files)
 	this.ServeJSON()
 
 }
