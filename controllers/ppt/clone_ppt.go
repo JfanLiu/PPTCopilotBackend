@@ -64,8 +64,8 @@ func (this *Controller) ClonePpt() {
 
 	// 若为用户自己的文件，复制失败
 
-	// 创建文件
-	_, err = models.CreateFile(source_file.Name, defaultProject.Id)
+	// 创建文件，默认不可见
+	_, err = models.CreatePptFile(source_file.Name, defaultProject.Id, false)
 	if err != nil {
 		this.Data["json"] = controllers.MakeResponse(controllers.Err, "创建文件失败", nil)
 		this.ServeJSON()

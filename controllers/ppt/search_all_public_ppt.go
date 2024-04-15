@@ -22,6 +22,8 @@ func (this *Controller) SearchAllPublicPpt() {
 		return
 	}
 
+	files = models.RefactFiles(files)
+
 	this.Data["json"] = controllers.MakeResponse(controllers.OK, "获取ppt列表成功", files)
 	this.ServeJSON()
 
