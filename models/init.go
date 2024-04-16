@@ -136,16 +136,16 @@ func init() {
 
 	template4 := Template{
 		Name:       "教育",
-		Cover:      jsonObject2string(dangjianJson[0]),
-		Transition: jsonObject2string(dangjianJson[1]),
-		Catalog_3:  jsonObject2string(dangjianJson[2]),
-		Catalog_4:  jsonObject2string(dangjianJson[3]),
-		Catalog_5:  jsonObject2string(dangjianJson[4]),
-		Content_1:  jsonObject2string(dangjianJson[5]),
-		Content_2:  jsonObject2string(dangjianJson[6]),
-		Content_3:  jsonObject2string(dangjianJson[7]),
-		Content_4:  jsonObject2string(dangjianJson[8]),
-		Thank:      jsonObject2string(dangjianJson[9]),
+		Cover:      jsonObject2string(jiaoyuJson[0]),
+		Transition: jsonObject2string(jiaoyuJson[1]),
+		Catalog_3:  jsonObject2string(jiaoyuJson[2]),
+		Catalog_4:  jsonObject2string(jiaoyuJson[3]),
+		Catalog_5:  jsonObject2string(jiaoyuJson[4]),
+		Content_1:  jsonObject2string(jiaoyuJson[5]),
+		Content_2:  jsonObject2string(jiaoyuJson[6]),
+		Content_3:  jsonObject2string(jiaoyuJson[7]),
+		Content_4:  jsonObject2string(jiaoyuJson[8]),
+		Thank:      jsonObject2string(jiaoyuJson[9]),
 	}
 	CreateTemplate(template4)
 
@@ -162,16 +162,16 @@ func init() {
 
 	template5 := Template{
 		Name:       "手绘风",
-		Cover:      jsonObject2string(dangjianJson[0]),
-		Transition: jsonObject2string(dangjianJson[1]),
-		Catalog_3:  jsonObject2string(dangjianJson[2]),
-		Catalog_4:  jsonObject2string(dangjianJson[3]),
-		Catalog_5:  jsonObject2string(dangjianJson[4]),
-		Content_1:  jsonObject2string(dangjianJson[5]),
-		Content_2:  jsonObject2string(dangjianJson[6]),
-		Content_3:  jsonObject2string(dangjianJson[7]),
-		Content_4:  jsonObject2string(dangjianJson[8]),
-		Thank:      jsonObject2string(dangjianJson[9]),
+		Cover:      jsonObject2string(shouhuifengJson[0]),
+		Transition: jsonObject2string(shouhuifengJson[1]),
+		Catalog_3:  jsonObject2string(shouhuifengJson[2]),
+		Catalog_4:  jsonObject2string(shouhuifengJson[3]),
+		Catalog_5:  jsonObject2string(shouhuifengJson[4]),
+		Content_1:  jsonObject2string(shouhuifengJson[5]),
+		Content_2:  jsonObject2string(shouhuifengJson[6]),
+		Content_3:  jsonObject2string(shouhuifengJson[7]),
+		Content_4:  jsonObject2string(shouhuifengJson[8]),
+		Thank:      jsonObject2string(shouhuifengJson[9]),
 	}
 	CreateTemplate(template5)
 
@@ -188,16 +188,16 @@ func init() {
 
 	template6 := Template{
 		Name:       "可爱",
-		Cover:      jsonObject2string(dangjianJson[0]),
-		Transition: jsonObject2string(dangjianJson[1]),
-		Catalog_3:  jsonObject2string(dangjianJson[2]),
-		Catalog_4:  jsonObject2string(dangjianJson[3]),
-		Catalog_5:  jsonObject2string(dangjianJson[4]),
-		Content_1:  jsonObject2string(dangjianJson[5]),
-		Content_2:  jsonObject2string(dangjianJson[6]),
-		Content_3:  jsonObject2string(dangjianJson[7]),
-		Content_4:  jsonObject2string(dangjianJson[8]),
-		Thank:      jsonObject2string(dangjianJson[9]),
+		Cover:      jsonObject2string(keaiJson[0]),
+		Transition: jsonObject2string(keaiJson[1]),
+		Catalog_3:  jsonObject2string(keaiJson[2]),
+		Catalog_4:  jsonObject2string(keaiJson[3]),
+		Catalog_5:  jsonObject2string(keaiJson[4]),
+		Content_1:  jsonObject2string(keaiJson[5]),
+		Content_2:  jsonObject2string(keaiJson[6]),
+		Content_3:  jsonObject2string(keaiJson[7]),
+		Content_4:  jsonObject2string(keaiJson[8]),
+		Thank:      jsonObject2string(keaiJson[9]),
 	}
 	CreateTemplate(template6)
 
@@ -214,16 +214,16 @@ func init() {
 
 	template7 := Template{
 		Name:       "线条",
-		Cover:      jsonObject2string(dangjianJson[0]),
-		Transition: jsonObject2string(dangjianJson[1]),
-		Catalog_3:  jsonObject2string(dangjianJson[2]),
-		Catalog_4:  jsonObject2string(dangjianJson[3]),
-		Catalog_5:  jsonObject2string(dangjianJson[4]),
-		Content_1:  jsonObject2string(dangjianJson[5]),
-		Content_2:  jsonObject2string(dangjianJson[6]),
-		Content_3:  jsonObject2string(dangjianJson[7]),
-		Content_4:  jsonObject2string(dangjianJson[8]),
-		Thank:      jsonObject2string(dangjianJson[9]),
+		Cover:      jsonObject2string(xiantiaoJson[0]),
+		Transition: jsonObject2string(xiantiaoJson[1]),
+		Catalog_3:  jsonObject2string(xiantiaoJson[2]),
+		Catalog_4:  jsonObject2string(xiantiaoJson[3]),
+		Catalog_5:  jsonObject2string(xiantiaoJson[4]),
+		Content_1:  jsonObject2string(xiantiaoJson[5]),
+		Content_2:  jsonObject2string(xiantiaoJson[6]),
+		Content_3:  jsonObject2string(xiantiaoJson[7]),
+		Content_4:  jsonObject2string(xiantiaoJson[8]),
+		Thank:      jsonObject2string(xiantiaoJson[9]),
 	}
 	CreateTemplate(template7)
 
@@ -240,16 +240,16 @@ func init() {
 
 	template8 := Template{
 		Name:       "水彩",
-		Cover:      jsonObject2string(dangjianJson[0]),
-		Transition: jsonObject2string(dangjianJson[1]),
-		Catalog_3:  jsonObject2string(dangjianJson[2]),
-		Catalog_4:  jsonObject2string(dangjianJson[3]),
-		Catalog_5:  jsonObject2string(dangjianJson[4]),
-		Content_1:  jsonObject2string(dangjianJson[5]),
-		Content_2:  jsonObject2string(dangjianJson[6]),
-		Content_3:  jsonObject2string(dangjianJson[7]),
-		Content_4:  jsonObject2string(dangjianJson[8]),
-		Thank:      jsonObject2string(dangjianJson[9]),
+		Cover:      jsonObject2string(shuicaiJson[0]),
+		Transition: jsonObject2string(shuicaiJson[1]),
+		Catalog_3:  jsonObject2string(shuicaiJson[2]),
+		Catalog_4:  jsonObject2string(shuicaiJson[3]),
+		Catalog_5:  jsonObject2string(shuicaiJson[4]),
+		Content_1:  jsonObject2string(shuicaiJson[5]),
+		Content_2:  jsonObject2string(shuicaiJson[6]),
+		Content_3:  jsonObject2string(shuicaiJson[7]),
+		Content_4:  jsonObject2string(shuicaiJson[8]),
+		Thank:      jsonObject2string(shuicaiJson[9]),
 	}
 	CreateTemplate(template8)
 
@@ -266,16 +266,16 @@ func init() {
 
 	template9 := Template{
 		Name:       "艺术",
-		Cover:      jsonObject2string(dangjianJson[0]),
-		Transition: jsonObject2string(dangjianJson[1]),
-		Catalog_3:  jsonObject2string(dangjianJson[2]),
-		Catalog_4:  jsonObject2string(dangjianJson[3]),
-		Catalog_5:  jsonObject2string(dangjianJson[4]),
-		Content_1:  jsonObject2string(dangjianJson[5]),
-		Content_2:  jsonObject2string(dangjianJson[6]),
-		Content_3:  jsonObject2string(dangjianJson[7]),
-		Content_4:  jsonObject2string(dangjianJson[8]),
-		Thank:      jsonObject2string(dangjianJson[9]),
+		Cover:      jsonObject2string(yishuJson[0]),
+		Transition: jsonObject2string(yishuJson[1]),
+		Catalog_3:  jsonObject2string(yishuJson[2]),
+		Catalog_4:  jsonObject2string(yishuJson[3]),
+		Catalog_5:  jsonObject2string(yishuJson[4]),
+		Content_1:  jsonObject2string(yishuJson[5]),
+		Content_2:  jsonObject2string(yishuJson[6]),
+		Content_3:  jsonObject2string(yishuJson[7]),
+		Content_4:  jsonObject2string(yishuJson[8]),
+		Thank:      jsonObject2string(yishuJson[9]),
 	}
 	CreateTemplate(template9)
 
@@ -292,16 +292,16 @@ func init() {
 
 	template10 := Template{
 		Name:       "冷淡",
-		Cover:      jsonObject2string(dangjianJson[0]),
-		Transition: jsonObject2string(dangjianJson[1]),
-		Catalog_3:  jsonObject2string(dangjianJson[2]),
-		Catalog_4:  jsonObject2string(dangjianJson[3]),
-		Catalog_5:  jsonObject2string(dangjianJson[4]),
-		Content_1:  jsonObject2string(dangjianJson[5]),
-		Content_2:  jsonObject2string(dangjianJson[6]),
-		Content_3:  jsonObject2string(dangjianJson[7]),
-		Content_4:  jsonObject2string(dangjianJson[8]),
-		Thank:      jsonObject2string(dangjianJson[9]),
+		Cover:      jsonObject2string(lengdanJson[0]),
+		Transition: jsonObject2string(lengdanJson[1]),
+		Catalog_3:  jsonObject2string(lengdanJson[2]),
+		Catalog_4:  jsonObject2string(lengdanJson[3]),
+		Catalog_5:  jsonObject2string(lengdanJson[4]),
+		Content_1:  jsonObject2string(lengdanJson[5]),
+		Content_2:  jsonObject2string(lengdanJson[6]),
+		Content_3:  jsonObject2string(lengdanJson[7]),
+		Content_4:  jsonObject2string(lengdanJson[8]),
+		Thank:      jsonObject2string(lengdanJson[9]),
 	}
 	CreateTemplate(template10)
 
