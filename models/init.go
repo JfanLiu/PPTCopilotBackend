@@ -123,4 +123,186 @@ func init() {
 	}
 	CreateTemplate(template3)
 
+	// 读取scripts下jiaoyu.json
+	jiaoyu, err := os.Open("./scripts/jiaoyu.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var jiaoyuJson []JsonObject
+	// 解析json文件
+
+	json.NewDecoder(jiaoyu).Decode(&jiaoyuJson)
+
+	template4 := Template{
+		Name:       "教育",
+		Cover:      jsonObject2string(dangjianJson[0]),
+		Transition: jsonObject2string(dangjianJson[1]),
+		Catalog_3:  jsonObject2string(dangjianJson[2]),
+		Catalog_4:  jsonObject2string(dangjianJson[3]),
+		Catalog_5:  jsonObject2string(dangjianJson[4]),
+		Content_1:  jsonObject2string(dangjianJson[5]),
+		Content_2:  jsonObject2string(dangjianJson[6]),
+		Content_3:  jsonObject2string(dangjianJson[7]),
+		Content_4:  jsonObject2string(dangjianJson[8]),
+		Thank:      jsonObject2string(dangjianJson[9]),
+	}
+	CreateTemplate(template4)
+
+	// 读取scripts下shouhuifeng.json
+	shouhuifeng, err := os.Open("./scripts/shouhuifeng.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var shouhuifengJson []JsonObject
+	// 解析json文件
+
+	json.NewDecoder(shouhuifeng).Decode(&shouhuifengJson)
+
+	template5 := Template{
+		Name:       "手绘风",
+		Cover:      jsonObject2string(dangjianJson[0]),
+		Transition: jsonObject2string(dangjianJson[1]),
+		Catalog_3:  jsonObject2string(dangjianJson[2]),
+		Catalog_4:  jsonObject2string(dangjianJson[3]),
+		Catalog_5:  jsonObject2string(dangjianJson[4]),
+		Content_1:  jsonObject2string(dangjianJson[5]),
+		Content_2:  jsonObject2string(dangjianJson[6]),
+		Content_3:  jsonObject2string(dangjianJson[7]),
+		Content_4:  jsonObject2string(dangjianJson[8]),
+		Thank:      jsonObject2string(dangjianJson[9]),
+	}
+	CreateTemplate(template5)
+
+	// 读取scripts下keai.json
+	keai, err := os.Open("./scripts/keai.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var keaiJson []JsonObject
+	// 解析json文件
+
+	json.NewDecoder(keai).Decode(&keaiJson)
+
+	template6 := Template{
+		Name:       "可爱",
+		Cover:      jsonObject2string(dangjianJson[0]),
+		Transition: jsonObject2string(dangjianJson[1]),
+		Catalog_3:  jsonObject2string(dangjianJson[2]),
+		Catalog_4:  jsonObject2string(dangjianJson[3]),
+		Catalog_5:  jsonObject2string(dangjianJson[4]),
+		Content_1:  jsonObject2string(dangjianJson[5]),
+		Content_2:  jsonObject2string(dangjianJson[6]),
+		Content_3:  jsonObject2string(dangjianJson[7]),
+		Content_4:  jsonObject2string(dangjianJson[8]),
+		Thank:      jsonObject2string(dangjianJson[9]),
+	}
+	CreateTemplate(template6)
+
+	// 读取scripts下xiantiao.json
+	xiantiao, err := os.Open("./scripts/xiantiao.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var xiantiaoJson []JsonObject
+	// 解析json文件
+
+	json.NewDecoder(xiantiao).Decode(&xiantiaoJson)
+
+	template7 := Template{
+		Name:       "线条",
+		Cover:      jsonObject2string(dangjianJson[0]),
+		Transition: jsonObject2string(dangjianJson[1]),
+		Catalog_3:  jsonObject2string(dangjianJson[2]),
+		Catalog_4:  jsonObject2string(dangjianJson[3]),
+		Catalog_5:  jsonObject2string(dangjianJson[4]),
+		Content_1:  jsonObject2string(dangjianJson[5]),
+		Content_2:  jsonObject2string(dangjianJson[6]),
+		Content_3:  jsonObject2string(dangjianJson[7]),
+		Content_4:  jsonObject2string(dangjianJson[8]),
+		Thank:      jsonObject2string(dangjianJson[9]),
+	}
+	CreateTemplate(template7)
+
+	// 读取scripts下shuicai.json
+	shuicai, err := os.Open("./scripts/shuicai.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var shuicaiJson []JsonObject
+	// 解析json文件
+
+	json.NewDecoder(shuicai).Decode(&shuicaiJson)
+
+	template8 := Template{
+		Name:       "水彩",
+		Cover:      jsonObject2string(dangjianJson[0]),
+		Transition: jsonObject2string(dangjianJson[1]),
+		Catalog_3:  jsonObject2string(dangjianJson[2]),
+		Catalog_4:  jsonObject2string(dangjianJson[3]),
+		Catalog_5:  jsonObject2string(dangjianJson[4]),
+		Content_1:  jsonObject2string(dangjianJson[5]),
+		Content_2:  jsonObject2string(dangjianJson[6]),
+		Content_3:  jsonObject2string(dangjianJson[7]),
+		Content_4:  jsonObject2string(dangjianJson[8]),
+		Thank:      jsonObject2string(dangjianJson[9]),
+	}
+	CreateTemplate(template8)
+
+	// 读取scripts下yishu.json
+	yishu, err := os.Open("./scripts/yishu.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var yishuJson []JsonObject
+	// 解析json文件
+
+	json.NewDecoder(yishu).Decode(&yishuJson)
+
+	template9 := Template{
+		Name:       "艺术",
+		Cover:      jsonObject2string(dangjianJson[0]),
+		Transition: jsonObject2string(dangjianJson[1]),
+		Catalog_3:  jsonObject2string(dangjianJson[2]),
+		Catalog_4:  jsonObject2string(dangjianJson[3]),
+		Catalog_5:  jsonObject2string(dangjianJson[4]),
+		Content_1:  jsonObject2string(dangjianJson[5]),
+		Content_2:  jsonObject2string(dangjianJson[6]),
+		Content_3:  jsonObject2string(dangjianJson[7]),
+		Content_4:  jsonObject2string(dangjianJson[8]),
+		Thank:      jsonObject2string(dangjianJson[9]),
+	}
+	CreateTemplate(template9)
+
+	// 读取scripts下lengdan.json
+	lengdan, err := os.Open("./scripts/lengdan.json")
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	var lengdanJson []JsonObject
+	// 解析json文件
+
+	json.NewDecoder(lengdan).Decode(&lengdanJson)
+
+	template10 := Template{
+		Name:       "冷淡",
+		Cover:      jsonObject2string(dangjianJson[0]),
+		Transition: jsonObject2string(dangjianJson[1]),
+		Catalog_3:  jsonObject2string(dangjianJson[2]),
+		Catalog_4:  jsonObject2string(dangjianJson[3]),
+		Catalog_5:  jsonObject2string(dangjianJson[4]),
+		Content_1:  jsonObject2string(dangjianJson[5]),
+		Content_2:  jsonObject2string(dangjianJson[6]),
+		Content_3:  jsonObject2string(dangjianJson[7]),
+		Content_4:  jsonObject2string(dangjianJson[8]),
+		Thank:      jsonObject2string(dangjianJson[9]),
+	}
+	CreateTemplate(template10)
+
 }

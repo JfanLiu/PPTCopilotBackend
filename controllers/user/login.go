@@ -32,11 +32,11 @@ func (this *Controller) Login() {
 
 	tokenString := models.CreateToken(user.Id)
 	// 设置在响应头中
-	this.Ctx.SetCookie("token", tokenString, "3600", "/", "", true, true, "None")
+	this.Ctx.SetCookie("token", tokenString, "3600", "/", "", false, true, "None")
 
 	this.Data["json"] = map[string]interface{}{
 		"code":    controllers.OK,
 		"message": "success",
 		"token":   tokenString, "data": user}
-	this.ServeJSON()  
+	this.ServeJSON()
 }
